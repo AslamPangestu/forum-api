@@ -1,7 +1,8 @@
 /* eslint-disable camelcase */
+const TABLE_NAME = 'authentications'
 
 exports.up = (pgm) => {
-  pgm.createTable('authentications', {
+  pgm.createTable(TABLE_NAME, {
     token: {
       type: 'TEXT',
       notNull: true
@@ -10,5 +11,5 @@ exports.up = (pgm) => {
 }
 
 exports.down = (pgm) => {
-  pgm.dropTable('authentications')
+  pgm.dropTable(TABLE_NAME)
 }

@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
+const TABLE_NAME = 'users'
+
 exports.up = (pgm) => {
-  pgm.createTable('users', {
+  pgm.createTable(TABLE_NAME, {
     id: {
       type: 'VARCHAR(50)',
       primaryKey: true
@@ -22,5 +24,5 @@ exports.up = (pgm) => {
 }
 
 exports.down = (pgm) => {
-  pgm.dropTable('users')
+  pgm.dropTable(TABLE_NAME)
 }
