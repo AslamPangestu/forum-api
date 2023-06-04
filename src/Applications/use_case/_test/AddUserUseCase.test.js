@@ -17,7 +17,7 @@ describe('AddUserUseCase', () => {
     }
 
     const mockRegisteredUser = new RegisteredUser({
-      id: 'user-123',
+      id: 'user-1',
       username: useCasePayload.username,
       fullname: useCasePayload.fullname
     })
@@ -45,7 +45,7 @@ describe('AddUserUseCase', () => {
 
     // Assert
     expect(registeredUser).toStrictEqual(new RegisteredUser({
-      id: 'user-123',
+      id: 'user-1',
       username: useCasePayload.username,
       fullname: useCasePayload.fullname
     }))

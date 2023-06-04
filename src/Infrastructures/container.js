@@ -3,9 +3,10 @@
 const { createContainer } = require('instances-container')
 
 // external agency
-const { nanoid } = require('nanoid')
 const bcrypt = require('bcrypt')
 const Jwt = require('@hapi/jwt')
+
+const { generateId } = require('../Commons/utilities/generator')
 const pool = require('./database/postgres/pool')
 
 // service (repository, helper, manager, etc)
@@ -38,7 +39,7 @@ container.register([
           concrete: pool
         },
         {
-          concrete: nanoid
+          concrete: generateId
         }
       ]
     }

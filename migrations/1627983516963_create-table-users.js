@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 const TABLE_NAME = 'users'
 
 exports.up = (pgm) => {
@@ -18,6 +17,14 @@ exports.up = (pgm) => {
     },
     fullname: {
       type: 'TEXT',
+      notNull: true
+    },
+    created_at: {
+      type: 'timestamp',
+      notNull: true
+    },
+    updated_at: {
+      type: 'timestamp',
       notNull: true
     }
   })

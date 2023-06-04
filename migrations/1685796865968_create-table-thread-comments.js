@@ -25,11 +25,13 @@ exports.up = pgm => {
     },
     user_id: {
       type: 'VARCHAR(50)',
-      references: '"users"'
+      references: '"users"',
+      notNull: true
     },
     thread_id: {
       type: 'VARCHAR(50)',
-      references: '"threads"'
+      references: '"threads"',
+      notNull: true
     },
     comment_id: {
       type: 'VARCHAR(50)',

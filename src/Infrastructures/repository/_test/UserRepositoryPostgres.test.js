@@ -48,7 +48,7 @@ describe('UserRepositoryPostgres', () => {
       await userRepositoryPostgres.addUser(registerUser)
 
       // Assert
-      const users = await UsersTableTestHelper.findUsersById('user-123')
+      const users = await UsersTableTestHelper.findUsersById('user-1')
       expect(users).toHaveLength(1)
     })
 
@@ -67,7 +67,7 @@ describe('UserRepositoryPostgres', () => {
 
       // Assert
       expect(registeredUser).toStrictEqual(new RegisteredUser({
-        id: 'user-123',
+        id: 'user-1',
         username: 'dicoding',
         fullname: 'Dicoding Indonesia'
       }))
