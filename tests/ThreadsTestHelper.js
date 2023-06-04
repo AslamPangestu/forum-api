@@ -23,6 +23,7 @@ const ThreadsTestHelper = {
     const query = {
       text: `SELECT * FROM ${TABLE_NAME} 
       JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id
+      JOIN users ON ${TABLE_NAME}.user_id = users.id
       WHERE id = $1`,
       values: [id]
     }
