@@ -1,12 +1,13 @@
 const InvariantError = require('../../Commons/exceptions/InvariantError')
 const RegisteredUser = require('../../Domains/users/entities/RegisteredUser')
-const UserRepository = require('../../Domains/users/UserRepository')
+const IUserRepository = require('../../Domains/users/IUserRepository')
 
-class UserRepositoryPostgres extends UserRepository {
-  constructor (pool, idGenerator) {
+class UserRepositoryPostgres extends IUserRepository {
+  constructor (pool, idGenerator, currentDateGenerator) {
     super()
     this._pool = pool
     this._idGenerator = idGenerator
+    this._currentDateGenerator = currentDateGenerator
   }
 
   async verifyAvailableUsername (username) {
@@ -27,8 +28,8 @@ class UserRepositoryPostgres extends UserRepository {
     const id = `user-${this._idGenerator()}`
 
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id, username, fullname',
-      values: [id, username, password, fullname]
+      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5, $5) RETURNING id, username, fullname',
+      values: [id, username, password, fullname, this._currentDateGenerator()]
     }
 
     const result = await this._pool.query(query)

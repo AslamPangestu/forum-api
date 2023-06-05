@@ -10,20 +10,20 @@ const { generateId } = require('../Commons/utilities/generator')
 const pool = require('./database/postgres/pool')
 
 // service (repository, helper, manager, etc)
-const UserRepository = require('../Domains/users/UserRepository')
+const IUserRepository = require('../Domains/users/IUserRepository')
 const PasswordHash = require('../Applications/security/PasswordHash')
 const UserRepositoryPostgres = require('./repository/UserRepositoryPostgres')
 const BcryptPasswordHash = require('./security/BcryptPasswordHash')
 
 // use case
-const AddUserUseCase = require('../Applications/use_case/AddUserUseCase')
+const AddUserUseCase = require('../Applications/use_case/authentications/AddUserUseCase')
 const AuthenticationTokenManager = require('../Applications/security/AuthenticationTokenManager')
 const JwtTokenManager = require('./security/JwtTokenManager')
-const LoginUserUseCase = require('../Applications/use_case/LoginUserUseCase')
-const AuthenticationRepository = require('../Domains/authentications/AuthenticationRepository')
+const LoginUserUseCase = require('../Applications/use_case/authentications/LoginUserUseCase')
+const IAuthenticationRepository = require('../Domains/authentications/IAuthenticationRepository')
 const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres')
-const LogoutUserUseCase = require('../Applications/use_case/LogoutUserUseCase')
-const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAuthenticationUseCase')
+const LogoutUserUseCase = require('../Applications/use_case/authentications/LogoutUserUseCase')
+const RefreshAuthenticationUseCase = require('../Applications/use_case/authentications/RefreshAuthenticationUseCase')
 
 // creating container
 const container = createContainer()
@@ -31,7 +31,7 @@ const container = createContainer()
 // registering services and repository
 container.register([
   {
-    key: UserRepository.name,
+    key: IUserRepository.name,
     Class: UserRepositoryPostgres,
     parameter: {
       dependencies: [
@@ -45,7 +45,7 @@ container.register([
     }
   },
   {
-    key: AuthenticationRepository.name,
+    key: IAuthenticationRepository.name,
     Class: AuthenticationRepositoryPostgres,
     parameter: {
       dependencies: [
@@ -89,7 +89,7 @@ container.register([
       dependencies: [
         {
           name: 'userRepository',
-          internal: UserRepository.name
+          internal: IUserRepository.name
         },
         {
           name: 'passwordHash',
@@ -106,11 +106,11 @@ container.register([
       dependencies: [
         {
           name: 'userRepository',
-          internal: UserRepository.name
+          internal: IUserRepository.name
         },
         {
           name: 'authenticationRepository',
-          internal: AuthenticationRepository.name
+          internal: IAuthenticationRepository.name
         },
         {
           name: 'authenticationTokenManager',
@@ -131,7 +131,7 @@ container.register([
       dependencies: [
         {
           name: 'authenticationRepository',
-          internal: AuthenticationRepository.name
+          internal: IAuthenticationRepository.name
         }
       ]
     }
@@ -144,7 +144,7 @@ container.register([
       dependencies: [
         {
           name: 'authenticationRepository',
-          internal: AuthenticationRepository.name
+          internal: IAuthenticationRepository.name
         },
         {
           name: 'authenticationTokenManager',
