@@ -17,8 +17,7 @@ describe('GetThread entities', () => {
       {
         id: 'thread-1',
         title: 'abc',
-        created_at: '2023-06-04T13:29:54.057Z',
-        user_id: 'user-1'
+        created_at: '2023-06-04T13:29:54.057Z'
       }
     ]
 
@@ -34,6 +33,7 @@ describe('GetThread entities', () => {
         title: 1,
         body: 21,
         created_at: '2023-06-04T13:29:54.057Z',
+        user_id: 'user-1',
         username: 'Username 1'
       }
     ]
@@ -64,7 +64,7 @@ describe('GetThread entities', () => {
     expect(thread.id).toEqual(payload[0].id)
     expect(thread.title).toEqual(payload[0].title)
     expect(thread.body).toEqual(payload[0].body)
-    expect(thread.createdAt).toEqual(payload[0].created_at)
+    expect(thread.date).toEqual(payload[0].created_at)
     expect(thread.username).toEqual(payload[0].user.username)
     // TODO: Implement List Comments with Replies
   })

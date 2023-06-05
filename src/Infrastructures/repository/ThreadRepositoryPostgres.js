@@ -12,20 +12,18 @@ class ThreadRepositoryPostgres extends IThreadRepository {
     this._currentDateGenerator = currentDateGenerator
   }
 
-  async addThread (addThread) {
+  async addThread (addThread, userId) {
     const { title, body } = addThread
     const generatedId = `thread-${this._idGenerator()}`
 
     const query = {
-      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $4, $4, $5) RETURNING id`,
+      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $4, $4, $5) RETURNING id, title`,
       values: [generatedId, title, body, this._currentDateGenerator(), userId]
     }
 
     const result = await this._pool.query(query)
 
-    const { id } = result.rows[0]
-
-    return id
+    return result.rows[0]
   }
 
   async getThreadById (id) {
