@@ -6,8 +6,9 @@ class GetThread {
     this.title = payloads[0].title
     this.body = payloads[0].body
     this.createdAt = payloads[0].created_at
-    this.username = payloads[0].user.username
-    this.comments = this._generateComments(payloads)
+    this.username = payloads[0].username
+    // TODO: Implement List Comments with Replies
+    // this.comments = this._generateComments(payloads)
   }
 
   _verifyPayload (payloads) {
@@ -19,7 +20,7 @@ class GetThread {
     const title = payloads[0].title
     const body = payloads[0].body
     const createdAt = payloads[0].created_at
-    const username = payloads[0].user.username
+    const username = payloads[0].username
 
     if (!id || !username || !title || !body || !createdAt) {
       throw new Error('THREAD.NOT_CONTAIN_NEEDED_PROPERTY')

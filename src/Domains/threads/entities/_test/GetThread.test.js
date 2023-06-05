@@ -18,7 +18,7 @@ describe('GetThread entities', () => {
         id: 'thread-1',
         title: 'abc',
         created_at: '2023-06-04T13:29:54.057Z',
-        user: { id: 'user-1' }
+        user_id: 'user-1'
       }
     ]
 
@@ -34,7 +34,7 @@ describe('GetThread entities', () => {
         title: 1,
         body: 21,
         created_at: '2023-06-04T13:29:54.057Z',
-        user: 'Hai'
+        username: 'Username 1'
       }
     ]
 
@@ -44,13 +44,15 @@ describe('GetThread entities', () => {
 
   it('should create GetThread entities correctly', () => {
     // Arrange
+    // TODO: Implement List Comments with Replies
     const payload = [
       {
         id: 'thread-1',
         title: 'abc',
         body: 'abc',
         created_at: '2023-06-04T13:29:54.057Z',
-        user: { id: 'user-1', username: 'Username 1' }
+        user_id: 'user-1',
+        username: 'Username 1'
       }
     ]
 
@@ -64,5 +66,6 @@ describe('GetThread entities', () => {
     expect(thread.body).toEqual(payload[0].body)
     expect(thread.createdAt).toEqual(payload[0].created_at)
     expect(thread.username).toEqual(payload[0].user.username)
+    // TODO: Implement List Comments with Replies
   })
 })

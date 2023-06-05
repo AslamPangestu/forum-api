@@ -1,9 +1,9 @@
-const ThreadRepository = require('../ThreadRepository')
+const IThreadRepository = require('../IThreadRepository')
 
-describe('ThreadRepository interface', () => {
+describe('IThreadRepository interface', () => {
   it('should throw error when invoke abstract behavior', async () => {
     // Arrange
-    const threadRepository = new ThreadRepository()
+    const threadRepository = new IThreadRepository()
 
     // Action and Assert
     await expect(threadRepository.addThread({})).rejects.toThrowError('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED')
