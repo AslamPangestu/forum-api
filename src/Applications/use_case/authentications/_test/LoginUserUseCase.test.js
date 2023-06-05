@@ -1,5 +1,5 @@
-const UserRepository = require('../../../../Domains/users/UserRepository')
-const AuthenticationRepository = require('../../../../Domains/authentications/AuthenticationRepository')
+const IUserRepository = require('../../../../Domains/users/IUserRepository')
+const IAuthenticationRepository = require('../../../../Domains/authentications/IAuthenticationRepository')
 const AuthenticationTokenManager = require('../../../security/AuthenticationTokenManager')
 const PasswordHash = require('../../../security/PasswordHash')
 const LoginUserUseCase = require('../LoginUserUseCase')
@@ -16,8 +16,8 @@ describe('GetAuthenticationUseCase', () => {
       accessToken: 'access_token',
       refreshToken: 'refresh_token'
     })
-    const mockUserRepository = new UserRepository()
-    const mockAuthenticationRepository = new AuthenticationRepository()
+    const mockUserRepository = new IUserRepository()
+    const mockAuthenticationRepository = new IAuthenticationRepository()
     const mockAuthenticationTokenManager = new AuthenticationTokenManager()
     const mockPasswordHash = new PasswordHash()
 

@@ -1,4 +1,4 @@
-const AuthenticationRepository = require('../../../../Domains/authentications/AuthenticationRepository')
+const IAuthenticationRepository = require('../../../../Domains/authentications/IAuthenticationRepository')
 const LogoutUserUseCase = require('../LogoutUserUseCase')
 
 describe('LogoutUserUseCase', () => {
@@ -31,7 +31,7 @@ describe('LogoutUserUseCase', () => {
     const useCasePayload = {
       refreshToken: 'refreshToken'
     }
-    const mockAuthenticationRepository = new AuthenticationRepository()
+    const mockAuthenticationRepository = new IAuthenticationRepository()
     mockAuthenticationRepository.checkAvailabilityToken = jest.fn()
       .mockImplementation(() => Promise.resolve())
     mockAuthenticationRepository.deleteToken = jest.fn()

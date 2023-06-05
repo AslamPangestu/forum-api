@@ -1,6 +1,6 @@
 const RegisterUser = require('../../../../Domains/users/entities/RegisterUser')
 const RegisteredUser = require('../../../../Domains/users/entities/RegisteredUser')
-const UserRepository = require('../../../../Domains/users/UserRepository')
+const IUserRepository = require('../../../../Domains/users/IUserRepository')
 const PasswordHash = require('../../../security/PasswordHash')
 const AddUserUseCase = require('../AddUserUseCase')
 
@@ -23,7 +23,7 @@ describe('AddUserUseCase', () => {
     })
 
     /** creating dependency of use case */
-    const mockUserRepository = new UserRepository()
+    const mockUserRepository = new IUserRepository()
     const mockPasswordHash = new PasswordHash()
 
     /** mocking needed function */

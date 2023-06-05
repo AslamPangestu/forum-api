@@ -1,5 +1,5 @@
 const AddThread = require('../../../../Domains/threads/entities/AddThread')
-const ThreadRepository = require('../../../../Domains/threads/ThreadRepository')
+const IThreadRepository = require('../../../../Domains/threads/IThreadRepository')
 const AddThreadUseCase = require('../AddThreadUseCase')
 
 describe('AddThreadUseCase', () => {
@@ -13,18 +13,12 @@ describe('AddThreadUseCase', () => {
       body: 'Dicoding Indonesia'
     }
 
-    const mockAddThread = new AddThread({
-      id: 'thread-1',
-      title: useCasePayload.title,
-      body: useCasePayload.body
-    })
-
     /** creating dependency of use case */
-    const mockThreadRepository = new ThreadRepository()
+    const mockThreadRepository = new IThreadRepository()
 
     /** mocking needed function */
     mockThreadRepository.addThread = jest.fn()
-      .mockImplementation(() => Promise.resolve(mockAddThread))
+      .mockImplementation(() => Promise.resolve('thread-1'))
 
     /** creating use case instance */
     const addThreadUseCase = new AddThreadUseCase({
@@ -38,7 +32,6 @@ describe('AddThreadUseCase', () => {
     expect(addThread).toStrictEqual('thread-1')
 
     expect(mockThreadRepository.addThread).toBeCalledWith(new AddThread({
-      id: 'thread-1',
       title: useCasePayload.title,
       body: useCasePayload.body
     }))

@@ -1,5 +1,5 @@
 const GetThread = require('../../../../Domains/threads/entities/GetThread')
-const ThreadRepository = require('../../../../Domains/threads/ThreadRepository')
+const IThreadRepository = require('../../../../Domains/threads/IThreadRepository')
 const GetThreadUseCase = require('../GetThreadUseCase')
 
 describe('GetThreadUseCase', () => {
@@ -13,13 +13,20 @@ describe('GetThreadUseCase', () => {
     }
 
     /** creating dependency of use case */
-    const mockThreadRepository = new ThreadRepository()
+    const mockThreadRepository = new IThreadRepository()
 
     /** mocking needed function */
     mockThreadRepository.findThreadById = jest.fn()
-      .mockImplementation(() => Promise.resolve({
-        id: 'thread-1'
-      }))
+      .mockImplementation(() => Promise.resolve(new GetThread([
+        {
+          id: 'thread-1',
+          title: 'abc',
+          body: 'abc',
+          created_at: '2023-06-04T13:29:54.057Z',
+          user_id: 'user-1',
+          username: 'Username 1'
+        }
+      ])))
 
     /** creating use case instance */
     const getThreadUseCase = new GetThreadUseCase({
@@ -36,7 +43,8 @@ describe('GetThreadUseCase', () => {
         title: 'abc',
         body: 'abc',
         created_at: '2023-06-04T13:29:54.057Z',
-        user: { id: 'user-1', username: 'Username 1' }
+        user_id: 'user-1',
+        username: 'Username 1'
       }
     ]))
 
