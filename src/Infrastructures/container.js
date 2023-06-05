@@ -1,35 +1,43 @@
 /* istanbul ignore file */
-
 const { createContainer } = require('instances-container')
 
 // external agency
 const bcrypt = require('bcrypt')
 const Jwt = require('@hapi/jwt')
 
-const { generateId } = require('../Commons/utilities/generator')
+const { generateId, generateCurrentDate } = require('../Commons/utilities/generator')
 const pool = require('./database/postgres/pool')
 
 // service (repository, helper, manager, etc)
-const IUserRepository = require('../Domains/users/IUserRepository')
 const PasswordHash = require('../Applications/security/PasswordHash')
+const AuthenticationTokenManager = require('../Applications/security/AuthenticationTokenManager')
+
+const IAuthenticationRepository = require('../Domains/authentications/IAuthenticationRepository')
+const IUserRepository = require('../Domains/users/IUserRepository')
+const IThreadRepository = require('../Domains/threads/IThreadRepository')
+
+const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres')
 const UserRepositoryPostgres = require('./repository/UserRepositoryPostgres')
+const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres')
+
 const BcryptPasswordHash = require('./security/BcryptPasswordHash')
+const JwtTokenManager = require('./security/JwtTokenManager')
 
 // use case
 const AddUserUseCase = require('../Applications/use_case/authentications/AddUserUseCase')
-const AuthenticationTokenManager = require('../Applications/security/AuthenticationTokenManager')
-const JwtTokenManager = require('./security/JwtTokenManager')
 const LoginUserUseCase = require('../Applications/use_case/authentications/LoginUserUseCase')
-const IAuthenticationRepository = require('../Domains/authentications/IAuthenticationRepository')
-const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres')
 const LogoutUserUseCase = require('../Applications/use_case/authentications/LogoutUserUseCase')
 const RefreshAuthenticationUseCase = require('../Applications/use_case/authentications/RefreshAuthenticationUseCase')
+
+const AddThreadUseCase = require('../Applications/use_case/threads/AddThreadUseCase')
+const GetThreadUseCase = require('../Applications/use_case/threads/GetThreadUseCase')
 
 // creating container
 const container = createContainer()
 
 // registering services and repository
 container.register([
+  // REPOSITORY INTERFACE
   {
     key: IUserRepository.name,
     Class: UserRepositoryPostgres,
@@ -40,6 +48,26 @@ container.register([
         },
         {
           concrete: generateId
+        },
+        {
+          concrete: generateCurrentDate
+        }
+      ]
+    }
+  },
+  {
+    key: IThreadRepository.name,
+    Class: ThreadRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool
+        },
+        {
+          concrete: generateId
+        },
+        {
+          concrete: generateCurrentDate
         }
       ]
     }
@@ -55,6 +83,8 @@ container.register([
       ]
     }
   },
+
+  // SERVICE
   {
     key: PasswordHash.name,
     Class: BcryptPasswordHash,
@@ -81,6 +111,7 @@ container.register([
 
 // registering use cases
 container.register([
+  // AUTH USE CASE
   {
     key: AddUserUseCase.name,
     Class: AddUserUseCase,
@@ -149,6 +180,34 @@ container.register([
         {
           name: 'authenticationTokenManager',
           internal: AuthenticationTokenManager.name
+        }
+      ]
+    }
+  },
+
+  // THREAD USE CASE
+  {
+    key: AddThreadUseCase.name,
+    Class: AddThreadUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadRepository',
+          internal: IThreadRepository.name
+        }
+      ]
+    }
+  },
+  {
+    key: GetThreadUseCase.name,
+    Class: GetThreadUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadRepository',
+          internal: IThreadRepository.name
         }
       ]
     }
