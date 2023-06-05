@@ -1,9 +1,9 @@
-const UserRepository = require('../UserRepository')
+const IUserRepository = require('../IUserRepository')
 
-describe('UserRepository interface', () => {
+describe('IUserRepository interface', () => {
   it('should throw error when invoke abstract behavior', async () => {
     // Arrange
-    const userRepository = new UserRepository()
+    const userRepository = new IUserRepository()
 
     // Action and Assert
     await expect(userRepository.addUser({})).rejects.toThrowError('USER_REPOSITORY.METHOD_NOT_IMPLEMENTED')

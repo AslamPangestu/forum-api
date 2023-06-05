@@ -1,9 +1,9 @@
-const AuthenticationRepository = require('../AuthenticationRepository')
+const IAuthenticationRepository = require('../IAuthenticationRepository')
 
-describe('AuthenticationRepository interface', () => {
+describe('IAuthenticationRepository interface', () => {
   it('should throw error when invoke unimplemented method', async () => {
     // Arrange
-    const authenticationRepository = new AuthenticationRepository()
+    const authenticationRepository = new IAuthenticationRepository()
 
     // Action & Assert
     await expect(authenticationRepository.addToken('')).rejects.toThrowError('AUTHENTICATION_REPOSITORY.METHOD_NOT_IMPLEMENTED')
