@@ -30,6 +30,7 @@ exports.up = pgm => {
       notNull: true
     }
   })
+  pgm.createIndex(TABLE_NAME, 'user_id')
 }
 
 exports.down = pgm => {

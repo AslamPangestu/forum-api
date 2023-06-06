@@ -9,7 +9,11 @@ class AddThreadUseCase {
   async execute (useCasePayload, userId) {
     const addThread = new AddThread(useCasePayload)
     const user = await this._userRepository.getUserById(userId)
-    return this._threadRepository.addThread(addThread, user)
+    const thread = await this._threadRepository.addThread(addThread, userId)
+    return {
+      ...thread,
+      owner: user.username
+    }
   }
 }
 

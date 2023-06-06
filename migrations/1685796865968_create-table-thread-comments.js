@@ -38,6 +38,9 @@ exports.up = pgm => {
       references: '"thread_comments"'
     }
   })
+  pgm.createIndex(TABLE_NAME, 'user_id')
+  pgm.createIndex(TABLE_NAME, 'thread_id')
+  pgm.createIndex(TABLE_NAME, 'comment_id')
 }
 
 exports.down = pgm => {

@@ -14,7 +14,7 @@ describe('ThreadRepositoryPostgres', () => {
     await pool.end()
   })
 
-  describe('addUser function', () => {
+  describe('addThread function', () => {
     it('should persist thread and return thread correctly', async () => {
       // Arrange
       const addThread = new AddThread({
@@ -26,7 +26,7 @@ describe('ThreadRepositoryPostgres', () => {
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
 
       // Action
-      await threadRepositoryPostgres.addThread(addThread)
+      await threadRepositoryPostgres.addThread(addThread, 'user-1')
 
       // Assert
       const threads = await ThreadsTableTestHelper.findThreadById('thread-1')
@@ -44,7 +44,7 @@ describe('ThreadRepositoryPostgres', () => {
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
 
       // Action
-      const threadId = await threadRepositoryPostgres.addThread(addThread)
+      const threadId = await threadRepositoryPostgres.addThread(addThread, 'user-1')
 
       // Assert
       expect(threadId).toStrictEqual('thread-1')

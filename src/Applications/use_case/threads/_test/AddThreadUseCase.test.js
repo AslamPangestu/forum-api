@@ -26,8 +26,7 @@ describe('AddThreadUseCase', () => {
     mockThreadRepository.addThread = jest.fn()
       .mockImplementation(() => Promise.resolve({
         id: 'thread-1',
-        title: useCasePayload.title,
-        owner: user.username
+        title: useCasePayload.title
       }))
 
     mockUserRepository.getUserById = jest.fn()
@@ -57,6 +56,6 @@ describe('AddThreadUseCase', () => {
     expect(mockThreadRepository.addThread).toBeCalledWith(new AddThread({
       title: useCasePayload.title,
       body: useCasePayload.body
-    }), user)
+    }), user.id)
   })
 })
