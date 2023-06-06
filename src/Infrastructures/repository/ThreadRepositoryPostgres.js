@@ -14,7 +14,7 @@ class ThreadRepositoryPostgres extends IThreadRepository {
 
   async addThread (addThread, userId) {
     const { title, body } = addThread
-    const generatedId = `thread-${this._idGenerator()}`
+    const generatedId = this._idGenerator('thread')
 
     const query = {
       text: `WITH thread AS (INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $4, $4, $5) RETURNING id, title),
@@ -33,7 +33,7 @@ class ThreadRepositoryPostgres extends IThreadRepository {
       text: `SELECT * FROM ${TABLE_NAME} 
         JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id
         JOIN users ON ${TABLE_NAME}.user_id = users.id
-        WHERE id = $1`,
+        WHERE ${TABLE_NAME} .id = $1`,
       values: [id]
     }
 

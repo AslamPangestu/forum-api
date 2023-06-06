@@ -32,7 +32,7 @@ class GetThread {
   }
 
   // TODO: Implement List Comments with Replies
-  _generateComments (payloads) {}
+  // _generateComments (payloads) {}
 }
 
 module.exports = GetThread
