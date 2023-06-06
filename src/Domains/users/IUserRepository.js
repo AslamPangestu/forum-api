@@ -14,6 +14,10 @@ class IUserRepository {
   async getIdByUsername (username) {
     throw new Error('USER_REPOSITORY.METHOD_NOT_IMPLEMENTED')
   }
+
+  async getUserById (username) {
+    throw new Error('USER_REPOSITORY.METHOD_NOT_IMPLEMENTED')
+  }
 }
 
 module.exports = IUserRepository

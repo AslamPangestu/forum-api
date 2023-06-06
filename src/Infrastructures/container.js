@@ -195,6 +195,10 @@ container.register([
         {
           name: 'threadRepository',
           internal: IThreadRepository.name
+        },
+        {
+          name: 'userRepository',
+          internal: IUserRepository.name
         }
       ]
     }

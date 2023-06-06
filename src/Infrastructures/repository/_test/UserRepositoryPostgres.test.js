@@ -76,7 +76,7 @@ describe('UserRepositoryPostgres', () => {
     })
   })
 
-  describe('getPasswordByUsername', () => {
+  describe('getPasswordByUsername function', () => {
     it('should throw InvariantError when user not found', () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {}, {})
@@ -101,7 +101,7 @@ describe('UserRepositoryPostgres', () => {
     })
   })
 
-  describe('getIdByUsername', () => {
+  describe('getIdByUsername function', () => {
     it('should throw InvariantError when user not found', async () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {}, {})
@@ -122,6 +122,35 @@ describe('UserRepositoryPostgres', () => {
 
       // Assert
       expect(userId).toEqual('user-321')
+    })
+  })
+
+  describe('getUserById function', () => {
+    it('should throw InvariantError when user not found', async () => {
+      // Arrange
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {}, {})
+
+      // Action & Assert
+      await expect(userRepositoryPostgres.getUserById('user-2'))
+        .rejects
+        .toThrowError(InvariantError)
+    })
+
+    it('should return user correctly', async () => {
+      // Arrange
+      const payload = {
+        fullname: 'Dicoding Indonesia',
+        id: 'user-1',
+        username: 'dicoding'
+      }
+      await UsersTableTestHelper.addUser(payload)
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {}, {})
+
+      // Action
+      const user = await userRepositoryPostgres.getUserById('user-1')
+
+      // Assert
+      expect(user).toEqual(payload)
     })
   })
 })

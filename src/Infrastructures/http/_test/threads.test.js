@@ -117,7 +117,7 @@ describe('/threads endpoint', () => {
     it('should response 400 when thread not found', async () => {
       // Action
       const response = await server.inject({
-        method: 'POST',
+        method: 'GET',
         url: '/threads/thread-2'
       })
 
