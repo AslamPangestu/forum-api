@@ -1,7 +1,7 @@
 const RegisterUser = require('../../../../Domains/users/entities/RegisterUser')
 const RegisteredUser = require('../../../../Domains/users/entities/RegisteredUser')
 const IUserRepository = require('../../../../Domains/users/IUserRepository')
-const PasswordHash = require('../../../security/PasswordHash')
+const IPasswordHash = require('../../../security/IPasswordHash')
 const AddUserUseCase = require('../AddUserUseCase')
 
 describe('AddUserUseCase', () => {
@@ -24,7 +24,7 @@ describe('AddUserUseCase', () => {
 
     /** creating dependency of use case */
     const mockUserRepository = new IUserRepository()
-    const mockPasswordHash = new PasswordHash()
+    const mockPasswordHash = new IPasswordHash()
 
     /** mocking needed function */
     mockUserRepository.verifyAvailableUsername = jest.fn()

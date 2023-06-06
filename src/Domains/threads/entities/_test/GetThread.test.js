@@ -65,7 +65,7 @@ describe('GetThread entities', () => {
     expect(thread.title).toEqual(payload[0].title)
     expect(thread.body).toEqual(payload[0].body)
     expect(thread.date).toEqual(payload[0].created_at)
-    expect(thread.username).toEqual(payload[0].user.username)
+    expect(thread.username).toEqual(payload[0].username)
     // TODO: Implement List Comments with Replies
   })
 })

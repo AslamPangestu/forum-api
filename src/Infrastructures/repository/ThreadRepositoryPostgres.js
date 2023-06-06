@@ -17,7 +17,9 @@ class ThreadRepositoryPostgres extends IThreadRepository {
     const generatedId = `thread-${this._idGenerator()}`
 
     const query = {
-      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $4, $4, $5) RETURNING id, title`,
+      text: `WITH thread AS (INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $4, $4, $5) RETURNING id, title),
+      user AS (SELECT username FROM users WHERE id = $5)
+      SELECT thread.id, thread.title, user.username FROM thread, user`,
       values: [generatedId, title, body, this._currentDateGenerator(), userId]
     }
 

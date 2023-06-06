@@ -35,7 +35,7 @@ exports.up = pgm => {
     },
     comment_id: {
       type: 'VARCHAR(50)',
-      references: '"comments"'
+      references: '"thread_comments"'
     }
   })
 }

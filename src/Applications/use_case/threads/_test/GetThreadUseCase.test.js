@@ -48,8 +48,6 @@ describe('GetThreadUseCase', () => {
       }
     ]))
 
-    expect(mockThreadRepository.findThreadById).toBeCalledWith({
-      id: useCasePayload.id
-    })
+    expect(mockThreadRepository.findThreadById).toBeCalledWith(useCasePayload.id)
   })
 })

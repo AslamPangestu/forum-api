@@ -1,4 +1,4 @@
-class AuthenticationTokenManager {
+class IAuthenticationTokenManager {
   async createRefreshToken (payload) {
     throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED')
   }
@@ -16,4 +16,4 @@ class AuthenticationTokenManager {
   }
 }
 
-module.exports = AuthenticationTokenManager
+module.exports = IAuthenticationTokenManager

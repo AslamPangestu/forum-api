@@ -9,8 +9,8 @@ const { generateId, generateCurrentDate } = require('../Commons/utilities/genera
 const pool = require('./database/postgres/pool')
 
 // service (repository, helper, manager, etc)
-const PasswordHash = require('../Applications/security/PasswordHash')
-const AuthenticationTokenManager = require('../Applications/security/AuthenticationTokenManager')
+const IPasswordHash = require('../Applications/security/IPasswordHash')
+const IAuthenticationTokenManager = require('../Applications/security/IAuthenticationTokenManager')
 
 const IAuthenticationRepository = require('../Domains/authentications/IAuthenticationRepository')
 const IUserRepository = require('../Domains/users/IUserRepository')
@@ -86,7 +86,7 @@ container.register([
 
   // SERVICE
   {
-    key: PasswordHash.name,
+    key: IPasswordHash.name,
     Class: BcryptPasswordHash,
     parameter: {
       dependencies: [
@@ -97,7 +97,7 @@ container.register([
     }
   },
   {
-    key: AuthenticationTokenManager.name,
+    key: IAuthenticationTokenManager.name,
     Class: JwtTokenManager,
     parameter: {
       dependencies: [
@@ -124,7 +124,7 @@ container.register([
         },
         {
           name: 'passwordHash',
-          internal: PasswordHash.name
+          internal: IPasswordHash.name
         }
       ]
     }
@@ -145,11 +145,11 @@ container.register([
         },
         {
           name: 'authenticationTokenManager',
-          internal: AuthenticationTokenManager.name
+          internal: IAuthenticationTokenManager.name
         },
         {
           name: 'passwordHash',
-          internal: PasswordHash.name
+          internal: IPasswordHash.name
         }
       ]
     }
@@ -179,7 +179,7 @@ container.register([
         },
         {
           name: 'authenticationTokenManager',
-          internal: AuthenticationTokenManager.name
+          internal: IAuthenticationTokenManager.name
         }
       ]
     }

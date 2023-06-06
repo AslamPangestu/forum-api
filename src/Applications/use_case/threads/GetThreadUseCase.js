@@ -6,7 +6,7 @@ class GetThreadUseCase {
   async execute (useCasePayload) {
     this._verifyPayload(useCasePayload)
     const { id } = useCasePayload
-    return this._threadRepository.getThreadById(id)
+    return this._threadRepository.findThreadById(id)
   }
 
   _verifyPayload ({ id }) {

@@ -1,4 +1,4 @@
-const EncryptionHelper = require('../../Applications/security/PasswordHash')
+const EncryptionHelper = require('../../Applications/security/IPasswordHash')
 const AuthenticationError = require('../../Commons/exceptions/AuthenticationError')
 
 class BcryptPasswordHash extends EncryptionHelper {

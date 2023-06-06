@@ -1,5 +1,5 @@
 const IAuthenticationRepository = require('../../../../Domains/authentications/IAuthenticationRepository')
-const AuthenticationTokenManager = require('../../../security/AuthenticationTokenManager')
+const IAuthenticationTokenManager = require('../../../security/IAuthenticationTokenManager')
 const RefreshAuthenticationUseCase = require('../RefreshAuthenticationUseCase')
 
 describe('RefreshAuthenticationUseCase', () => {
@@ -33,7 +33,7 @@ describe('RefreshAuthenticationUseCase', () => {
       refreshToken: 'some_refresh_token'
     }
     const mockAuthenticationRepository = new IAuthenticationRepository()
-    const mockAuthenticationTokenManager = new AuthenticationTokenManager()
+    const mockAuthenticationTokenManager = new IAuthenticationTokenManager()
     // Mocking
     mockAuthenticationRepository.checkAvailabilityToken = jest.fn()
       .mockImplementation(() => Promise.resolve())

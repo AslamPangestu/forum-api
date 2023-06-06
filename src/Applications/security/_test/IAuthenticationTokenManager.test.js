@@ -1,9 +1,9 @@
-const AuthenticationTokenManager = require('../AuthenticationTokenManager')
+const IAuthenticationTokenManager = require('../IAuthenticationTokenManager')
 
-describe('AuthenticationTokenManager interface', () => {
+describe('IAuthenticationTokenManager interface', () => {
   it('should throw error when invoke unimplemented method', async () => {
     // Arrange
-    const tokenManager = new AuthenticationTokenManager()
+    const tokenManager = new IAuthenticationTokenManager()
 
     // Action & Assert
     await expect(tokenManager.createAccessToken('')).rejects.toThrowError('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED')

@@ -3,7 +3,7 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
 const AuthenticationsTableTestHelper = require('../../../../tests/AuthenticationsTableTestHelper')
 const container = require('../../container')
 const createServer = require('../createServer')
-const AuthenticationTokenManager = require('../../../Applications/security/AuthenticationTokenManager')
+const IAuthenticationTokenManager = require('../../../Applications/security/IAuthenticationTokenManager')
 
 describe('/authentications endpoint', () => {
   afterAll(async () => {
@@ -246,7 +246,7 @@ describe('/authentications endpoint', () => {
     it('should return 400 if refresh token not registered in database', async () => {
       // Arrange
       const server = await createServer(container)
-      const refreshToken = await container.getInstance(AuthenticationTokenManager.name).createRefreshToken({ username: 'dicoding' })
+      const refreshToken = await container.getInstance(IAuthenticationTokenManager.name).createRefreshToken({ username: 'dicoding' })
 
       // Action
       const response = await server.inject({
