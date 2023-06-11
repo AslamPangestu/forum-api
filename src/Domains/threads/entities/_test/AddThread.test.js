@@ -4,7 +4,7 @@ describe('a AddThread entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
-      title: 'abc'
+      title: 'Tittle Thread'
     }
 
     // Action and Assert
@@ -25,8 +25,8 @@ describe('a AddThread entities', () => {
   it('should create registerUser object correctly', () => {
     // Arrange
     const payload = {
-      title: 'dicoding',
-      body: 'Dicoding Indonesia'
+      title: 'Tittle Thread',
+      body: 'Body Thread'
     }
 
     // Action

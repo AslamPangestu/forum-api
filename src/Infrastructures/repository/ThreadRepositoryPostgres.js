@@ -28,9 +28,12 @@ class ThreadRepositoryPostgres extends IThreadRepository {
 
   async getThreadById (id) {
     const query = {
-      text: `SELECT * FROM ${TABLE_NAME} 
-        JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id
-        JOIN users ON ${TABLE_NAME}.user_id = users.id
+      text: `SELECT ${TABLE_NAME}.id, title, body, ${TABLE_NAME}.created_at AS date, 
+        users.username, 
+        thread_comments.id AS comment_id
+        FROM ${TABLE_NAME} 
+        LEFT JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id
+        INNER JOIN users ON ${TABLE_NAME}.user_id = users.id
         WHERE ${TABLE_NAME}.id = $1`,
       values: [id]
     }
@@ -41,7 +44,7 @@ class ThreadRepositoryPostgres extends IThreadRepository {
       throw new InvariantError('thread tidak ditemukan')
     }
 
-    return GetThread(result.rows)
+    return new GetThread(result.rows)
   }
 }
 

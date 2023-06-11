@@ -6,7 +6,7 @@ const TABLE_NAME = 'thread_comments'
 const ThreadCommentsTableTestHelper = {
   async addThreadComment ({
     id = 'thread_comment-1',
-    content = 'comment',
+    content = 'comment 1',
     threadId = 'thread-1',
     currentDate = '2023-06-04T13:29:54.057Z',
     userId = 'user-1'
@@ -20,7 +20,7 @@ const ThreadCommentsTableTestHelper = {
 
   async addThreadCommentReply ({
     id = 'thread_comment-2',
-    content = 'comment',
+    content = 'comment reply 1',
     threadId = 'thread-1',
     commentId = 'thread_comment-1',
     currentDate = '2023-06-04T13:29:54.057Z',

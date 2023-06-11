@@ -10,12 +10,12 @@ describe('AddThreadUseCase', () => {
   it('should orchestrating the add thread action correctly', async () => {
     // Arrange
     const useCasePayload = {
-      title: 'dicoding',
-      body: 'Dicoding Indonesia'
+      title: 'Tittle Thread',
+      body: 'Body Thread'
     }
     const user = {
       id: 'user-1',
-      username: 'User 1'
+      username: 'dicoding'
     }
 
     /** creating dependency of use case */

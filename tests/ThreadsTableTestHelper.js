@@ -21,10 +21,13 @@ const ThreadsTestHelper = {
 
   async findThreadById (id) {
     const query = {
-      text: `SELECT * FROM ${TABLE_NAME} 
-      JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id
-      JOIN users ON ${TABLE_NAME}.user_id = users.id
-      WHERE id = $1`,
+      text: `SELECT ${TABLE_NAME}.id, title, body, ${TABLE_NAME}.created_at AS date, 
+      users.username, 
+      thread_comments.thread_id AS comment_id
+      FROM ${TABLE_NAME} 
+      LEFT JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id
+      INNER JOIN users ON ${TABLE_NAME}.user_id = users.id
+      WHERE ${TABLE_NAME}.id = $1`,
       values: [id]
     }
 

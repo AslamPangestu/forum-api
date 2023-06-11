@@ -1,4 +1,5 @@
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
+const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper')
 const InvariantError = require('../../../Commons/exceptions/InvariantError')
 const RegisterUser = require('../../../Domains/users/entities/RegisterUser')
 const RegisteredUser = require('../../../Domains/users/entities/RegisteredUser')
@@ -7,6 +8,7 @@ const UserRepositoryPostgres = require('../UserRepositoryPostgres')
 
 describe('UserRepositoryPostgres', () => {
   afterEach(async () => {
+    await ThreadsTableTestHelper.cleanTable()
     await UsersTableTestHelper.cleanTable()
   })
 
@@ -114,14 +116,14 @@ describe('UserRepositoryPostgres', () => {
 
     it('should return user id correctly', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-321', username: 'dicoding' })
+      await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding' })
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {}, {})
 
       // Action
       const userId = await userRepositoryPostgres.getIdByUsername('dicoding')
 
       // Assert
-      expect(userId).toEqual('user-321')
+      expect(userId).toEqual('user-1')
     })
   })
 
@@ -131,7 +133,7 @@ describe('UserRepositoryPostgres', () => {
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {}, {})
 
       // Action & Assert
-      await expect(userRepositoryPostgres.getUserById('user-2'))
+      await expect(userRepositoryPostgres.getUserById('user-1'))
         .rejects
         .toThrowError(InvariantError)
     })
@@ -139,8 +141,8 @@ describe('UserRepositoryPostgres', () => {
     it('should return user correctly', async () => {
       // Arrange
       const payload = {
-        fullname: 'Dicoding Indonesia',
         id: 'user-1',
+        fullname: 'Dicoding Indonesia',
         username: 'dicoding'
       }
       await UsersTableTestHelper.addUser(payload)
