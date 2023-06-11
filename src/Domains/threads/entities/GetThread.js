@@ -12,10 +12,6 @@ class GetThread {
   }
 
   _verifyPayload (payloads) {
-    if (!Array.isArray(payloads) || !payloads.length) {
-      throw new Error('THREAD.NOT_FOUND')
-    }
-
     const id = payloads[0].id
     const title = payloads[0].title
     const body = payloads[0].body
@@ -23,11 +19,11 @@ class GetThread {
     const username = payloads[0].username
 
     if (!id || !username || !title || !body || !date) {
-      throw new Error('THREAD.NOT_CONTAIN_NEEDED_PROPERTY')
+      throw new Error('GET_THREAD.NOT_CONTAIN_NEEDED_PROPERTY')
     }
 
     if (typeof id !== 'string' || typeof title !== 'string' || typeof body !== 'string' || date === 'Invalid Date' || typeof username !== 'string') {
-      throw new Error('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION')
+      throw new Error('GET_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION')
     }
   }
 

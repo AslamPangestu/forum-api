@@ -1,16 +1,6 @@
 const GetThread = require('../GetThread')
 
 describe('GetThread entities', () => {
-  it('should throw error when payload not an array or when array is empty', () => {
-    // Arrange
-    const payloadNotArray = {}
-    const payloadArrayEmpty = []
-
-    // Action & Assert
-    expect(() => new GetThread(payloadNotArray)).toThrowError('THREAD.NOT_FOUND')
-    expect(() => new GetThread(payloadArrayEmpty)).toThrowError('THREAD.NOT_FOUND')
-  })
-
   it('should throw error when payload does not contain needed property', () => {
     // Arrange
     const payload = [
@@ -22,7 +12,7 @@ describe('GetThread entities', () => {
     ]
 
     // Action & Assert
-    expect(() => new GetThread(payload)).toThrowError('THREAD.NOT_CONTAIN_NEEDED_PROPERTY')
+    expect(() => new GetThread(payload)).toThrowError('GET_THREAD.NOT_CONTAIN_NEEDED_PROPERTY')
   })
 
   it('should throw error when payload not meet data type specification', () => {
@@ -39,7 +29,7 @@ describe('GetThread entities', () => {
     ]
 
     // Action & Assert
-    expect(() => new GetThread(payload)).toThrowError('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION')
+    expect(() => new GetThread(payload)).toThrowError('GET_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION')
   })
 
   it('should create GetThread entities correctly', () => {
