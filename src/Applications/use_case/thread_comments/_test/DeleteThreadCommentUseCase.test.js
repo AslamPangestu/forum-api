@@ -1,6 +1,7 @@
-const DeleteThreadComment = require('../../../../Domains/threadComments/entities/DeleteThreadComment')
-const IThreadCommentRepository = require('../../../../Domains/threadComments/IThreadCommentRepository')
 const IUserRepository = require('../../../../Domains/users/IUserRepository')
+const IThreadCommentRepository = require('../../../../Domains/threadComments/IThreadCommentRepository')
+const DeleteThreadComment = require('../../../../Domains/threadComments/entities/DeleteThreadComment')
+
 const DeleteThreadCommentUseCase = require('../DeleteThreadCommentUseCase')
 
 describe('DeleteThreadCommentUseCase', () => {

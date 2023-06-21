@@ -1,11 +1,15 @@
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper')
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper')
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
+
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError')
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError')
+
 const AddThreadComment = require('../../../Domains/threadComments/entities/AddThreadComment')
 const DeleteThreadComment = require('../../../Domains/threadComments/entities/DeleteThreadComment')
+
 const pool = require('../../database/postgres/pool')
+
 const ThreadCommentRepositoryPostgres = require('../ThreadCommentRepositoryPostgres')
 
 describe('ThreadCommentRepositoryPostgres', () => {

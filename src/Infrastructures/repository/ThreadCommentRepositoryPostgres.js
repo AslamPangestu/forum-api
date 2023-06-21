@@ -1,5 +1,6 @@
 const NotFoundError = require('../../Commons/exceptions/NotFoundError')
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError')
+
 const IThreadCommentRepository = require('../../Domains/threadComments/IThreadCommentRepository')
 
 const TABLE_NAME = 'thread_comments'

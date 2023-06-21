@@ -1,5 +1,6 @@
-const GetThread = require('../../../../Domains/threads/entities/GetThread')
 const IThreadRepository = require('../../../../Domains/threads/IThreadRepository')
+const GetThread = require('../../../../Domains/threads/entities/GetThread')
+
 const GetThreadUseCase = require('../GetThreadUseCase')
 
 describe('GetThreadUseCase', () => {
@@ -43,7 +44,8 @@ describe('GetThreadUseCase', () => {
         title: 'Tittle Thread',
         body: 'Body Thread',
         date: '2023-06-04T13:29:54.057Z',
-        user_id: 'user-1',
+        comment_id: 'comment-1',
+        content: 'comment 1',
         username: 'dicoding'
       }
     ]))

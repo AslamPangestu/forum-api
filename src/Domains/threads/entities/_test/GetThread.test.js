@@ -23,7 +23,7 @@ describe('GetThread entities', () => {
         title: 1,
         body: 21,
         date: '2023-06-04T13:29:54.057Z',
-        user_id: {},
+        comment_id: {},
         username: []
       }
     ]
@@ -41,7 +41,8 @@ describe('GetThread entities', () => {
         title: 'Tittle Thread',
         body: 'Body Thread',
         date: '2023-06-04T13:29:54.057Z',
-        user_id: 'user-1',
+        comment_id: 'comment-1',
+        content: 'comment 1',
         username: 'dicoding'
       }
     ]

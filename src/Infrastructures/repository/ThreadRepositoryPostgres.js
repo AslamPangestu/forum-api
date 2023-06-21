@@ -1,6 +1,7 @@
 const NotFoundError = require('../../Commons/exceptions/NotFoundError')
-const GetThread = require('../../Domains/threads/entities/GetThread')
+
 const IThreadRepository = require('../../Domains/threads/IThreadRepository')
+const GetThread = require('../../Domains/threads/entities/GetThread')
 
 const TABLE_NAME = 'threads'
 
@@ -30,7 +31,9 @@ class ThreadRepositoryPostgres extends IThreadRepository {
     const query = {
       text: `SELECT ${TABLE_NAME}.id, title, body, ${TABLE_NAME}.created_at AS date, 
         users.username, 
-        thread_comments.id AS comment_id
+        thread_comments.id AS comment_id, thread_comments.created_at AS comment_at, 
+        CASE WHEN thread_comments.soft_delete_at IS NULL THEN thread_comments.content ELSE '**komentar telah dihapus**' END AS content, 
+        (SELECT users.username FROM users WHERE users.id = thread_comments.user_id) comment_username
         FROM ${TABLE_NAME} 
         LEFT JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id
         INNER JOIN users ON ${TABLE_NAME}.user_id = users.id

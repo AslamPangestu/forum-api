@@ -2,13 +2,15 @@ class GetThread {
   constructor (payloads) {
     this._verifyPayload(payloads)
 
+    console.log(payloads)
+
     this.id = payloads[0].id
     this.title = payloads[0].title
     this.body = payloads[0].body
     this.date = new Date(payloads[0].date).toISOString()
     this.username = payloads[0].username
     // TODO: Implement List Comments with Replies
-    // this.comments = this._generateComments(payloads)
+    this.comments = this._generateComments(payloads)
   }
 
   _verifyPayload (payloads) {
@@ -28,7 +30,14 @@ class GetThread {
   }
 
   // TODO: Implement List Comments with Replies
-  // _generateComments (payloads) {}
+  _generateComments (payloads = []) {
+    return payloads.map(item => ({
+      id: item.comment_id,
+      username: item.comment_username,
+      date: item.comment_at,
+      content: item.content
+    }))
+  }
 }
 
 module.exports = GetThread

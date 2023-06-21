@@ -1,8 +1,10 @@
-const pool = require('../../database/postgres/pool')
 const AuthenticationsTableTestHelper = require('../../../../tests/AuthenticationsTableTestHelper')
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper')
+
+const pool = require('../../database/postgres/pool')
 const container = require('../../container')
+
 const createServer = require('../createServer')
 
 let server, token

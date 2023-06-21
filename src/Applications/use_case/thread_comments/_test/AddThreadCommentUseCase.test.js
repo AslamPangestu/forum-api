@@ -1,7 +1,8 @@
+const IUserRepository = require('../../../../Domains/users/IUserRepository')
+const IThreadCommentRepository = require('../../../../Domains/threadComments/IThreadCommentRepository')
 const AddThreadComment = require('../../../../Domains/threadComments/entities/AddThreadComment')
 const AddedThreadComment = require('../../../../Domains/threadComments/entities/AddedThreadComment')
-const IThreadCommentRepository = require('../../../../Domains/threadComments/IThreadCommentRepository')
-const IUserRepository = require('../../../../Domains/users/IUserRepository')
+
 const AddThreadCommentUseCase = require('../AddThreadCommentUseCase')
 
 describe('AddThreadCommentUseCase', () => {

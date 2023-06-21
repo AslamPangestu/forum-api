@@ -1,9 +1,13 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper')
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
+
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError')
+
 const AddThread = require('../../../Domains/threads/entities/AddThread')
 const GetThread = require('../../../Domains/threads/entities/GetThread')
+
 const pool = require('../../database/postgres/pool')
+
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres')
 
 describe('ThreadRepositoryPostgres', () => {
@@ -81,6 +85,8 @@ describe('ThreadRepositoryPostgres', () => {
           title: 'Tittle Thread',
           body: 'Body Thread',
           date: '2023-06-04T06:29:54.057Z',
+          comment_id: 'comment-1',
+          content: 'comment 1',
           username: 'dicoding'
         }
       ]))
