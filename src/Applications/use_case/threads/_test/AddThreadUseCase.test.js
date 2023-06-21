@@ -1,4 +1,5 @@
 const AddThread = require('../../../../Domains/threads/entities/AddThread')
+const AddedThread = require('../../../../Domains/threads/entities/AddedThread')
 const IThreadRepository = require('../../../../Domains/threads/IThreadRepository')
 const IUserRepository = require('../../../../Domains/users/IUserRepository')
 const AddThreadUseCase = require('../AddThreadUseCase')
@@ -45,13 +46,13 @@ describe('AddThreadUseCase', () => {
     const addThread = await addThreadUseCase.execute(useCasePayload, user.id)
 
     // Assert
-    expect(addThread).toStrictEqual({
+    expect(addThread).toStrictEqual(new AddedThread({
       id: 'thread-1',
       title: useCasePayload.title,
       owner: user.username
-    })
+    }))
 
-    expect(mockUserRepository.getUserById).toBeCalledWith('user-1')
+    expect(mockUserRepository.getUserById).toBeCalledWith(user.id)
 
     expect(mockThreadRepository.addThread).toBeCalledWith(new AddThread({
       title: useCasePayload.title,
