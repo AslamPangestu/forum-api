@@ -33,22 +33,18 @@ const ThreadCommentsTableTestHelper = {
     await pool.query(query)
   },
 
-  async deleteThreadCommentById (id, currentDate = '2023-06-04T13:29:54.057Z') {
+  async findThreadComment (id, threadId, userId) {
     const query = {
-      text: `UPDATE ${TABLE_NAME} SET soft_delete_at = $2 WHERE id = $1`,
-      values: [id, currentDate]
+      text: `SELECT * FROM ${TABLE_NAME} WHERE id = $1 AND soft_delete_at IS NULL AND thread_id = $2 AND user_id = $3`,
+      values: [id, threadId, userId]
     }
+
     const result = await pool.query(query)
     return result.rows
   },
 
-  async deleteThreadCommentReplyById (id, commentId, currentDate = '2023-06-04T13:29:54.057Z') {
-    const query = {
-      text: `UPDATE ${TABLE_NAME} SET soft_delete_at = $3 WHERE id = $1 AND comment_id = $2`,
-      values: [id, commentId, currentDate]
-    }
-    const result = await pool.query(query)
-    return result.rows
+  async cleanTable () {
+    await pool.query(`DELETE FROM ${TABLE_NAME} WHERE 1=1`)
   }
 }
 

@@ -48,17 +48,17 @@ describe('ThreadRepositoryPostgres', () => {
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
 
       // Action
-      const threadId = await threadRepositoryPostgres.addThread(addThread, 'user-1')
+      const thread = await threadRepositoryPostgres.addThread(addThread, 'user-1')
 
       // Assert
-      expect(threadId).toStrictEqual({ id: 'thread-1', title: 'Tittle Thread' })
+      expect(thread).toStrictEqual({ id: 'thread-1', title: 'Tittle Thread' })
     })
   })
 
   describe('findThreadById function', () => {
     it('should throw NotFoundError when thread not found', () => {
       // Arrange
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {})
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {})
 
       // Action & Assert
       return expect(threadRepositoryPostgres.findThreadById('thread-1'))

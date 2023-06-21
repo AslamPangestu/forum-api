@@ -23,6 +23,8 @@ describe('DeleteThreadCommentUseCase', () => {
     const mockUserRepository = new IUserRepository()
 
     /** mocking needed function */
+    mockThreadCommentRepository.checkThreadCommentAllow = jest.fn()
+      .mockImplementation(() => Promise.resolve())
     mockThreadCommentRepository.deleteThreadComment = jest.fn()
       .mockImplementation(() => Promise.resolve())
 
@@ -43,6 +45,10 @@ describe('DeleteThreadCommentUseCase', () => {
 
     // Assert
     expect(mockUserRepository.getUserById).toHaveBeenCalledWith('user-1')
+    expect(mockThreadCommentRepository.checkThreadCommentAllow).toHaveBeenCalledWith(new DeleteThreadComment({
+      comment_id: useCasePayload.comment_id,
+      thread_id: useCasePayload.thread_id
+    }), user.id)
     expect(mockThreadCommentRepository.deleteThreadComment).toHaveBeenCalledWith(new DeleteThreadComment({
       comment_id: useCasePayload.comment_id,
       thread_id: useCasePayload.thread_id

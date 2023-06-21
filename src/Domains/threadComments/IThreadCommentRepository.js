@@ -3,7 +3,11 @@ class IThreadCommentRepository {
     throw new Error('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED')
   }
 
-  async deleteThreadComment (id) {
+  async deleteThreadComment (deleteThreadComment, userId) {
+    throw new Error('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED')
+  }
+
+  async checkThreadCommentAllow (checkThreadCommentAllow, userId) {
     throw new Error('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED')
   }
 }
