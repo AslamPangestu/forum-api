@@ -23,9 +23,11 @@ const threadDomainTranslator = {
   'GET_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat menampilkan thread karena tipe data tidak sesuai')
 }
 
-const threadUseCaseTranslator = {
-  'GET_THREAD_USE_CASE.NOT_CONTAIN_ID': new InvariantError('tidak dapat menampilkan thread karena properti yang dibutuhkan tidak ada'),
-  'GET_THREAD_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat menampilkan thread karena tipe data tidak sesuai')
+const threadCommentDomainTranslator = {
+  'ADD_THREAD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat komentar thread baru karena properti yang dibutuhkan tidak ada'),
+  'ADD_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat komentar thread baru karena tipe data tidak sesuai'),
+  'DELETE_THREAD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat menghapus komentar thread karena properti yang dibutuhkan tidak ada'),
+  'DELETE_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat menghapus komentar thread karena tipe data tidak sesuai')
 }
 
 const DomainErrorTranslator = {
@@ -38,7 +40,7 @@ DomainErrorTranslator._directories = {
   ...userDomainTranslator,
   ...authUseCaseTranslator,
   ...threadDomainTranslator,
-  ...threadUseCaseTranslator
+  ...threadCommentDomainTranslator
 }
 
 module.exports = DomainErrorTranslator

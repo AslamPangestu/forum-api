@@ -12,8 +12,8 @@ describe('a DeleteThreadComment entities', () => {
   it('should throw error when payload did not meet data type specification', () => {
     // Arrange
     const payload = {
-      comment_id: 123,
-      thread_id: true
+      commentId: 123,
+      threadId: true
     }
 
     // Action and Assert
@@ -23,8 +23,8 @@ describe('a DeleteThreadComment entities', () => {
   it('should create addComment object correctly', () => {
     // Arrange
     const payload = {
-      comment_id: 'thread_comment-1',
-      thread_id: 'thread-1'
+      commentId: 'thread_comment-1',
+      threadId: 'thread-1'
     }
 
     // Action
@@ -32,7 +32,7 @@ describe('a DeleteThreadComment entities', () => {
 
     // Assert
     expect(addComment).toBeInstanceOf(DeleteThreadComment)
-    expect(addComment.comment_id).toEqual(payload.comment_id)
-    expect(addComment.thread_id).toEqual(payload.thread_id)
+    expect(addComment.commentId).toEqual(payload.commentId)
+    expect(addComment.threadId).toEqual(payload.threadId)
   })
 })

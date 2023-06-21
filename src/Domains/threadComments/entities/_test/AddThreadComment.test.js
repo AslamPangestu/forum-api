@@ -13,7 +13,7 @@ describe('a AddThreadComment entities', () => {
     // Arrange
     const payload = {
       content: 123,
-      thread_id: true
+      threadId: true
     }
 
     // Action and Assert
@@ -24,7 +24,7 @@ describe('a AddThreadComment entities', () => {
     // Arrange
     const payload = {
       content: 'comment 1',
-      thread_id: 'thread-1'
+      threadId: 'thread-1'
     }
 
     // Action
@@ -33,6 +33,6 @@ describe('a AddThreadComment entities', () => {
     // Assert
     expect(addComment).toBeInstanceOf(AddThreadComment)
     expect(addComment.content).toEqual(payload.content)
-    expect(addComment.thread_id).toEqual(payload.thread_id)
+    expect(addComment.threadId).toEqual(payload.threadId)
   })
 })

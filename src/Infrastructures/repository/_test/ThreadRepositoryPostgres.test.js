@@ -17,17 +17,21 @@ describe('ThreadRepositoryPostgres', () => {
   })
 
   describe('addThread function', () => {
-    it('should persist thread and return thread correctly', async () => {
+    let addThread, threadRepositoryPostgres
+
+    beforeEach(async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding' })
-      const addThread = new AddThread({
+      addThread = new AddThread({
         title: 'Tittle Thread',
         body: 'Body Thread'
       })
       const fakeIdGenerator = () => 'thread-1' // stub!
       const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
+      threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
+    })
 
+    it('should persist thread and return thread correctly', async () => {
       // Action
       await threadRepositoryPostgres.addThread(addThread, 'user-1')
 
@@ -37,16 +41,6 @@ describe('ThreadRepositoryPostgres', () => {
     })
 
     it('should return thread correctly', async () => {
-      // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding' })
-      const addThread = new AddThread({
-        title: 'Tittle Thread',
-        body: 'Body Thread'
-      })
-      const fakeIdGenerator = () => 'thread-1' // stub!
-      const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
-
       // Action
       const thread = await threadRepositoryPostgres.addThread(addThread, 'user-1')
 

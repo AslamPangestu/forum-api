@@ -5,8 +5,7 @@ const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper
 const container = require('../../container')
 const createServer = require('../createServer')
 
-let server = null
-let token = null
+let server, token
 
 describe('/threads endpoint', () => {
   beforeEach(async () => {
@@ -112,7 +111,7 @@ describe('/threads endpoint', () => {
     })
   })
 
-  describe('when GET /threads/{id}', () => {
+  describe('when GET /threads/{threadId}', () => {
     it('should response 200 and return thread', async () => {
       // Arange
       const authResponse = await server.inject({

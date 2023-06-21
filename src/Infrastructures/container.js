@@ -15,10 +15,12 @@ const IAuthenticationTokenManager = require('../Applications/security/IAuthentic
 const IAuthenticationRepository = require('../Domains/authentications/IAuthenticationRepository')
 const IUserRepository = require('../Domains/users/IUserRepository')
 const IThreadRepository = require('../Domains/threads/IThreadRepository')
+const IThreadCommentRepository = require('../Domains/threadComments/IThreadCommentRepository')
 
 const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres')
 const UserRepositoryPostgres = require('./repository/UserRepositoryPostgres')
 const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres')
+const ThreadCommentRepositoryPostgres = require('./repository/ThreadCommentRepositoryPostgres')
 
 const BcryptPasswordHash = require('./security/BcryptPasswordHash')
 const JwtTokenManager = require('./security/JwtTokenManager')
@@ -31,6 +33,9 @@ const RefreshAuthenticationUseCase = require('../Applications/use_case/authentic
 
 const AddThreadUseCase = require('../Applications/use_case/threads/AddThreadUseCase')
 const GetThreadUseCase = require('../Applications/use_case/threads/GetThreadUseCase')
+
+const AddThreadCommentUseCase = require('../Applications/use_case/thread_comments/AddThreadCommentUseCase')
+const DeleteThreadCommentUseCase = require('../Applications/use_case/thread_comments/DeleteThreadCommentUseCase')
 
 // creating container
 const container = createContainer()
@@ -58,6 +63,23 @@ container.register([
   {
     key: IThreadRepository.name,
     Class: ThreadRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool
+        },
+        {
+          concrete: generateId
+        },
+        {
+          concrete: generateCurrentDate
+        }
+      ]
+    }
+  },
+  {
+    key: IThreadCommentRepository.name,
+    Class: ThreadCommentRepositoryPostgres,
     parameter: {
       dependencies: [
         {
@@ -212,6 +234,42 @@ container.register([
         {
           name: 'threadRepository',
           internal: IThreadRepository.name
+        }
+      ]
+    }
+  },
+
+  // THREAD COMMENT USE CASE
+  {
+    key: AddThreadCommentUseCase.name,
+    Class: AddThreadCommentUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadCommentRepository',
+          internal: IThreadCommentRepository.name
+        },
+        {
+          name: 'userRepository',
+          internal: IUserRepository.name
+        }
+      ]
+    }
+  },
+  {
+    key: DeleteThreadCommentUseCase.name,
+    Class: DeleteThreadCommentUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadCommentRepository',
+          internal: IThreadCommentRepository.name
+        },
+        {
+          name: 'userRepository',
+          internal: IUserRepository.name
         }
       ]
     }

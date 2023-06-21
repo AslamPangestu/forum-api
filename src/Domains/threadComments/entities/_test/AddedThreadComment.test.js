@@ -37,6 +37,6 @@ describe('a AddedThreadComment entities', () => {
     // Assert
     expect(addedComment).toBeInstanceOf(AddedThreadComment)
     expect(addedComment.content).toEqual(payload.content)
-    expect(addedComment.thread_id).toEqual(payload.thread_id)
+    expect(addedComment.threadId).toEqual(payload.threadId)
   })
 })

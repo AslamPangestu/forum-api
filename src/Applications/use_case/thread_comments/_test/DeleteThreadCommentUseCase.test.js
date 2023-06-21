@@ -10,8 +10,8 @@ describe('DeleteThreadCommentUseCase', () => {
   it('should orchestrating the delete thread comment action correctly', async () => {
     // Arrange
     const useCasePayload = {
-      thread_id: 'thread-1',
-      comment_id: 'thread_comment-1'
+      threadId: 'thread-1',
+      commentId: 'thread_comment-1'
     }
     const user = {
       id: 'user-1',
@@ -46,12 +46,12 @@ describe('DeleteThreadCommentUseCase', () => {
     // Assert
     expect(mockUserRepository.getUserById).toHaveBeenCalledWith('user-1')
     expect(mockThreadCommentRepository.checkThreadCommentAllow).toHaveBeenCalledWith(new DeleteThreadComment({
-      comment_id: useCasePayload.comment_id,
-      thread_id: useCasePayload.thread_id
+      commentId: useCasePayload.commentId,
+      threadId: useCasePayload.threadId
     }), user.id)
     expect(mockThreadCommentRepository.deleteThreadComment).toHaveBeenCalledWith(new DeleteThreadComment({
-      comment_id: useCasePayload.comment_id,
-      thread_id: useCasePayload.thread_id
+      commentId: useCasePayload.commentId,
+      threadId: useCasePayload.threadId
     }), user.id)
   })
 })

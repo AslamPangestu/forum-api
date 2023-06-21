@@ -12,7 +12,7 @@ describe('AddThreadCommentUseCase', () => {
     // Arrange
     const useCasePayload = {
       content: 'comment 1',
-      thread_id: 'thread-1'
+      threadId: 'thread-1'
     }
     const user = {
       id: 'user-1',
@@ -55,7 +55,7 @@ describe('AddThreadCommentUseCase', () => {
     expect(mockUserRepository.getUserById).toBeCalledWith(user.id)
 
     expect(mockThreadCommentRepository.addThreadComment).toBeCalledWith(new AddThreadComment({
-      thread_id: useCasePayload.thread_id,
+      threadId: useCasePayload.threadId,
       content: useCasePayload.content
     }), user.id)
   })

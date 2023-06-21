@@ -25,8 +25,8 @@ class ThreadsHandler {
   }
 
   async getThreadHandler (request, h) {
-    const gedThreadUseCase = this._container.getInstance(GetThreadUseCase.name)
-    const thread = await gedThreadUseCase.execute(request.params)
+    const getThreadUseCase = this._container.getInstance(GetThreadUseCase.name)
+    const thread = await getThreadUseCase.execute(request.params)
 
     const response = h.response({
       status: 'success',
