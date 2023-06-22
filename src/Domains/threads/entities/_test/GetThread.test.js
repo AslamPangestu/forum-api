@@ -1,6 +1,14 @@
 const GetThread = require('../GetThread')
 
 describe('GetThread entities', () => {
+  it('should throw error when payload not array', () => {
+    // Arrange
+    const payload = ''
+
+    // Action & Assert
+    expect(() => new GetThread(payload)).toThrowError('GET_THREAD.NOT_AN_ARRAY')
+  })
+
   it('should throw error when payload does not contain needed property', () => {
     // Arrange
     const payload = [

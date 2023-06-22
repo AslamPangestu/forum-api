@@ -11,6 +11,10 @@ class GetThread {
   }
 
   _verifyPayload (payloads) {
+    if (!Array.isArray(payloads)) {
+      throw new Error('GET_THREAD.NOT_AN_ARRAY')
+    }
+
     const id = payloads[0].id
     const title = payloads[0].title
     const body = payloads[0].body
@@ -26,7 +30,7 @@ class GetThread {
     }
   }
 
-  _generateComments (payloads = []) {
+  _generateComments (payloads) {
     if (payloads.length === 1) {
       return []
     }

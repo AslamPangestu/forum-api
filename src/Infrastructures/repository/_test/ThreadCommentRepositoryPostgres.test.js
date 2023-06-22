@@ -39,6 +39,21 @@ describe('ThreadCommentRepositoryPostgres', () => {
         threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
       })
 
+      describe('and thread does not exist', () => {
+        it('should throw NotFoundError when thread not found', async () => {
+          // Arrange
+          const addThreadComment = new AddThreadComment({
+            content: 'comment 1',
+            threadId: 'thread-3'
+          })
+
+          // Action & Assert
+          return expect(threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1'))
+            .rejects
+            .toThrowError('tidak dapat membuat komentar thread baru karena thread tidak ditemukan')
+        })
+      })
+
       describe('and thread exist', () => {
         let addThreadComment
 
@@ -71,21 +86,6 @@ describe('ThreadCommentRepositoryPostgres', () => {
 
           // Assert
           expect(threadComment).toStrictEqual({ id: 'thread_comment-1', content: 'comment 1' })
-        })
-      })
-
-      describe('and thread does not exist', () => {
-        it('should throw NotFoundError when thread not found', async () => {
-          // Arrange
-          const addThreadComment = new AddThreadComment({
-            content: 'comment 1',
-            threadId: 'thread-2'
-          })
-
-          // Action & Assert
-          return expect(threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1'))
-            .rejects
-            .toThrowError(NotFoundError)
         })
       })
     })

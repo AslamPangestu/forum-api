@@ -27,9 +27,7 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
 
       return result.rows[0]
     } catch (error) {
-      if (error.message.includes('thread_comments_thread_id_fkey') || error.message.includes('thread_comments_comment_id_fkey')) {
-        throw new NotFoundError('tidak dapat membuat komentar thread baru karena thread tidak ditemukan')
-      }
+      throw new NotFoundError('tidak dapat membuat komentar thread baru karena thread tidak ditemukan')
     }
   }
 
