@@ -6,6 +6,7 @@ class DeleteThreadComment {
 
     this.commentId = commentId
     this.threadId = threadId
+    this.replyId = payload?.replyId || null
   }
 
   _verifyPayload ({ commentId, threadId }) {

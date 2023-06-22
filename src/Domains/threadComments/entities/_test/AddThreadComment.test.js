@@ -3,7 +3,7 @@ const AddThreadComment = require('../AddThreadComment')
 describe('a AddThreadComment entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
-    const payload = {}
+    const payload = { content: 'comment 1' }
 
     // Action and Assert
     expect(() => new AddThreadComment(payload)).toThrowError('ADD_THREAD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY')
@@ -34,5 +34,23 @@ describe('a AddThreadComment entities', () => {
     expect(addComment).toBeInstanceOf(AddThreadComment)
     expect(addComment.content).toEqual(payload.content)
     expect(addComment.threadId).toEqual(payload.threadId)
+  })
+
+  it('should create addComment with reply object correctly', () => {
+    // Arrange
+    const payload = {
+      content: 'comment 1',
+      threadId: 'thread-1',
+      commentId: 'thread_comment-1'
+    }
+
+    // Action
+    const addComment = new AddThreadComment(payload)
+
+    // Assert
+    expect(addComment).toBeInstanceOf(AddThreadComment)
+    expect(addComment.content).toEqual(payload.content)
+    expect(addComment.threadId).toEqual(payload.threadId)
+    expect(addComment.commentId).toEqual(payload.commentId)
   })
 })

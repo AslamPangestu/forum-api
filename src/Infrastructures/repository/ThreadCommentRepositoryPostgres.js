@@ -18,8 +18,8 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
     const generatedId = this._idGenerator('thread_comments')
 
     const query = {
-      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $3, NULL, $4, $5, NULL) RETURNING id, content`,
-      values: [generatedId, content, this._currentDateGenerator(), userId, threadId]
+      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $3, NULL, $4, $5, $6) RETURNING id, content`,
+      values: [generatedId, content, this._currentDateGenerator(), userId, threadId, addThreadComment?.commentId || null]
     }
 
     try {
@@ -27,7 +27,7 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
 
       return result.rows[0]
     } catch (error) {
-      if (error.message === 'insert or update on table "thread_comments" violates foreign key constraint "thread_comments_thread_id_fkey"') {
+      if (error.message.includes('thread_comments_thread_id_fkey') || error.message.includes('thread_comments_comment_id_fkey')) {
         throw new NotFoundError('tidak dapat membuat komentar thread baru karena thread tidak ditemukan')
       }
     }
@@ -35,9 +35,17 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
 
   async checkThreadCommentAllow (checkThreadCommentAllow, userId) {
     const { commentId, threadId } = checkThreadCommentAllow
+    let baseQuery = `SELECT * FROM ${TABLE_NAME} WHERE id = $1 AND thread_id = $2 AND soft_delete_at IS NULL`
+    const baseParam = [commentId, threadId]
+
+    if (checkThreadCommentAllow?.replyId) {
+      baseQuery += ' AND comment_id = $3'
+      baseParam[0] = checkThreadCommentAllow?.replyId
+      baseParam.push(checkThreadCommentAllow.commentId)
+    }
     const query = {
-      text: `SELECT * FROM ${TABLE_NAME} WHERE id = $1 AND thread_id = $2 AND soft_delete_at IS NULL`,
-      values: [commentId, threadId]
+      text: baseQuery,
+      values: baseParam
     }
 
     const result = await this._pool.query(query)
@@ -55,16 +63,19 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
 
   async deleteThreadComment (deleteThreadComment, userId) {
     const { commentId, threadId } = deleteThreadComment
+    let baseQuery = `UPDATE ${TABLE_NAME} SET soft_delete_at = $2 WHERE id = $1 AND thread_id = $3 AND soft_delete_at IS NULL AND user_id = $4`
+    const baseParam = [commentId, this._currentDateGenerator(), threadId, userId]
+    if (deleteThreadComment?.replyId) {
+      baseQuery += ' AND comment_id = $5'
+      baseParam[0] = deleteThreadComment?.replyId
+      baseParam.push(deleteThreadComment.commentId)
+    }
     const query = {
-      text: `UPDATE ${TABLE_NAME} SET soft_delete_at = $2 WHERE id = $1 AND thread_id = $3 AND soft_delete_at IS NULL AND user_id = $4`,
-      values: [commentId, this._currentDateGenerator(), threadId, userId]
+      text: baseQuery,
+      values: baseParam
     }
 
-    const result = await this._pool.query(query)
-
-    if (!result.rowCount) {
-      throw new NotFoundError('tidak dapat menghapus komentar thread karena thread atau komentar thread tidak ditemukan')
-    }
+    await this._pool.query(query)
   }
 }
 

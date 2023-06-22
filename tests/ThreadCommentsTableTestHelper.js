@@ -8,21 +8,7 @@ const ThreadCommentsTableTestHelper = {
     id = 'thread_comment-1',
     content = 'comment 1',
     threadId = 'thread-1',
-    currentDate = '2023-06-04T13:29:54.057Z',
-    userId = 'user-1'
-  }) {
-    const query = {
-      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $3, NULL, $4, $5, NULL)`,
-      values: [id, content, currentDate, userId, threadId]
-    }
-    await pool.query(query)
-  },
-
-  async addThreadCommentReply ({
-    id = 'thread_comment-2',
-    content = 'comment reply 1',
-    threadId = 'thread-1',
-    commentId = 'thread_comment-1',
+    commentId = null,
     currentDate = '2023-06-04T13:29:54.057Z',
     userId = 'user-1'
   }) {
@@ -33,10 +19,16 @@ const ThreadCommentsTableTestHelper = {
     await pool.query(query)
   },
 
-  async findThreadComment (id, threadId, userId) {
+  async findThreadComment (id, threadId, userId, commentId) {
+    let baseQuery = `SELECT * FROM ${TABLE_NAME} WHERE id = $1 AND thread_id = $2 AND soft_delete_at IS NULL AND user_id = $3`
+    const baseParam = [id, threadId, userId]
+    if (commentId) {
+      baseQuery += ' AND comment_id = $4'
+      baseParam.push(commentId)
+    }
     const query = {
-      text: `SELECT * FROM ${TABLE_NAME} WHERE id = $1 AND soft_delete_at IS NULL AND thread_id = $2 AND user_id = $3`,
-      values: [id, threadId, userId]
+      text: baseQuery,
+      values: baseParam
     }
 
     const result = await pool.query(query)

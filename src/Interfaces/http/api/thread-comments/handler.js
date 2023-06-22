@@ -6,6 +6,7 @@ class ThreadsHandler {
     this._container = container
 
     this.postThreadCommentHandler = this.postThreadCommentHandler.bind(this)
+    this.postThreadCommentReplyHandler = this.postThreadCommentReplyHandler.bind(this)
     this.deleteThreadCommentHandler = this.deleteThreadCommentHandler.bind(this)
   }
 
@@ -21,6 +22,24 @@ class ThreadsHandler {
       status: 'success',
       data: {
         addedComment
+      }
+    })
+    response.code(201)
+    return response
+  }
+
+  async postThreadCommentReplyHandler (request, h) {
+    const { id: credentialId } = request.auth.credentials
+    const addThreadCommentUseCase = this._container.getInstance(AddThreadCommentUseCase.name)
+    const addedReply = await addThreadCommentUseCase.execute({
+      ...request.payload,
+      ...request.params
+    }, credentialId)
+
+    const response = h.response({
+      status: 'success',
+      data: {
+        addedReply
       }
     })
     response.code(201)

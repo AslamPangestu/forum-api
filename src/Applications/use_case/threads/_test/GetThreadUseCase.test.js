@@ -44,9 +44,11 @@ describe('GetThreadUseCase', () => {
         title: 'Tittle Thread',
         body: 'Body Thread',
         date: '2023-06-04T13:29:54.057Z',
-        comment_id: 'comment-1',
-        content: 'comment 1',
-        username: 'dicoding'
+        username: 'dicoding',
+        comment_id: null,
+        comment_content: null,
+        comment_username: null,
+        comment_at: null
       }
     ]))
 

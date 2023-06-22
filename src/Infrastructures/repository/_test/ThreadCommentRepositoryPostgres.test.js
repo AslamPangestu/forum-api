@@ -25,17 +25,72 @@ describe('ThreadCommentRepositoryPostgres', () => {
 
   describe('addThreadComment function', () => {
     let threadCommentRepositoryPostgres
+
     beforeEach(async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding' })
-      const fakeIdGenerator = () => 'thread_comment-1' // stub!
-      const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
-      threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
     })
 
-    describe('and thread exist', () => {
-      let addThreadComment
+    describe('and no reply', () => {
+      beforeEach(async () => {
+        // Arrange
+        const fakeIdGenerator = () => 'thread_comment-1' // stub!
+        const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
+        threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
+      })
 
+      describe('and thread exist', () => {
+        let addThreadComment
+
+        beforeEach(async () => {
+          // Arrange
+          await ThreadsTableTestHelper.addThread({
+            id: 'thread-1',
+            title: 'Tittle Thread',
+            body: 'Body Thread',
+            userId: 'user-1'
+          })
+          addThreadComment = new AddThreadComment({
+            content: 'comment 1',
+            threadId: 'thread-1'
+          })
+        })
+
+        it('should persist threadComment and return threadComment correctly', async () => {
+          // Action
+          await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
+
+          // Assert
+          const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-1', 'thread-1', 'user-1')
+          expect(threadComments.length).toBeGreaterThan(0)
+        })
+
+        it('should return threadComment correctly', async () => {
+          // Action
+          const threadComment = await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
+
+          // Assert
+          expect(threadComment).toStrictEqual({ id: 'thread_comment-1', content: 'comment 1' })
+        })
+      })
+
+      describe('and thread does not exist', () => {
+        it('should throw NotFoundError when thread not found', async () => {
+          // Arrange
+          const addThreadComment = new AddThreadComment({
+            content: 'comment 1',
+            threadId: 'thread-2'
+          })
+
+          // Action & Assert
+          return expect(threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1'))
+            .rejects
+            .toThrowError(NotFoundError)
+        })
+      })
+    })
+
+    describe('and with reply', () => {
       beforeEach(async () => {
         // Arrange
         await ThreadsTableTestHelper.addThread({
@@ -44,110 +99,184 @@ describe('ThreadCommentRepositoryPostgres', () => {
           body: 'Body Thread',
           userId: 'user-1'
         })
-        addThreadComment = new AddThreadComment({
-          content: 'comment 1',
-          threadId: 'thread-1'
+        const fakeIdGenerator = () => 'thread_comment-2' // stub!
+        const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
+        threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
+      })
+
+      describe('and thread comment does not exist', () => {
+        it('should throw NotFoundError when thread comment not found', async () => {
+          // Arrange
+          const addThreadComment = new AddThreadComment({
+            content: 'comment 1',
+            threadId: 'thread-1',
+            commentId: 'thread_comment-3'
+          })
+
+          // Action & Assert
+          return expect(threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1'))
+            .rejects
+            .toThrowError(NotFoundError)
         })
       })
-      it('should persist threadComment and return threadComment correctly', async () => {
-        // Action
-        await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
 
-        // Assert
-        const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-1', 'thread-1', 'user-1')
-        expect(threadComments.length).toBeGreaterThan(0)
-      })
+      describe('and thread comment exist', () => {
+        let addThreadComment
 
-      it('should return threadComment correctly', async () => {
-        // Action
-        const threadComment = await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
-
-        // Assert
-        expect(threadComment).toStrictEqual({ id: 'thread_comment-1', content: 'comment 1' })
-      })
-    })
-
-    describe('and thread does not exist', () => {
-      it('should throw NotFoundError when thread not found', async () => {
-        // Arrange
-        const addThreadComment = new AddThreadComment({
-          content: 'comment 1',
-          threadId: 'thread-2'
+        beforeEach(async () => {
+          // Arrange
+          await ThreadCommentsTableTestHelper.addThreadComment({
+            id: 'thread_comment-1',
+            content: 'comment 1',
+            threadId: 'thread-1',
+            userId: 'user-1'
+          })
+          addThreadComment = new AddThreadComment({
+            content: 'comment 1',
+            threadId: 'thread-1',
+            commentId: 'thread_comment-1'
+          })
         })
 
-        // Action & Assert
-        return expect(threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1'))
-          .rejects
-          .toThrowError(NotFoundError)
+        it('should persist threadComment and return threadComment correctly', async () => {
+          // Action
+          await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
+
+          // Assert
+          const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-2', 'thread-1', 'user-1', 'thread_comment-1')
+          expect(threadComments.length).toBeGreaterThan(0)
+        })
+
+        it('should return threadComment correctly', async () => {
+          // Action
+          const threadComment = await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
+
+          // Assert
+          expect(threadComment).toStrictEqual({ id: 'thread_comment-2', content: 'comment 1' })
+        })
       })
     })
   })
 
   describe('checkThreadCommentAllow function', () => {
-    it('should throw NotFoundError when threadComment not found', () => {
-      // Arrange
-      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {})
+    let threadCommentRepositoryPostgres
 
-      // Action & Assert
-      return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow({ commentId: 'thread_comment-1', threadId: 'thread-1' }, 'user-1'))
-        .rejects
-        .toThrowError(NotFoundError)
-    })
-
-    it('should throw AuthorizationError when threadComment is different owner', async () => {
+    beforeEach(async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding', fullname: 'Dicoding 1' })
-      await UsersTableTestHelper.addUser({ id: 'user-2', username: 'dicoding 2', fullname: 'Dicoding 2' })
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-1',
-        title: 'Tittle Thread',
-        body: 'Body Thread',
-        currentDate: '2023-06-04T13:29:54.057Z',
-        userId: 'user-1'
-      })
-      await ThreadCommentsTableTestHelper.addThreadComment({
-        id: 'thread_comment-1',
-        content: 'comment 1',
-        userId: 'user-1',
-        threadId: 'thread-1'
-      })
-      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {}, {})
-
-      // Action & Assert
-      return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow(
-        new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1' }), 'user-2'))
-        .rejects
-        .toThrowError(AuthorizationError)
+      threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {}, {})
     })
 
-    it('should not throw when threadComment is same owner', async () => {
-      // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding', fullname: 'Dicoding 1' })
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-1',
-        title: 'Tittle Thread',
-        body: 'Body Thread',
-        currentDate: '2023-06-04T13:29:54.057Z',
-        userId: 'user-1'
+    describe('and no reply', () => {
+      describe('and thread does not exist', () => {
+        it('should throw NotFoundError when threadComment not found', () => {
+          // Action & Assert
+          return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow({ commentId: 'thread_comment-1', threadId: 'thread-1' }, 'user-1'))
+            .rejects
+            .toThrowError(NotFoundError)
+        })
       })
-      await ThreadCommentsTableTestHelper.addThreadComment({
-        id: 'thread_comment-1',
-        content: 'comment 1',
-        userId: 'user-1',
-        threadId: 'thread-1'
-      })
-      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {}, {})
 
-      // Action & Assert
-      return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow(
-        new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1' }), 'user-1'))
-        .resolves.not
-        .toThrow(AuthorizationError)
+      describe('and thread exist', () => {
+        beforeEach(async () => {
+          // Arrange
+          await ThreadsTableTestHelper.addThread({
+            id: 'thread-1',
+            title: 'Tittle Thread',
+            body: 'Body Thread',
+            currentDate: '2023-06-04T13:29:54.057Z',
+            userId: 'user-1'
+          })
+          await ThreadCommentsTableTestHelper.addThreadComment({
+            id: 'thread_comment-1',
+            content: 'comment 1',
+            userId: 'user-1',
+            threadId: 'thread-1'
+          })
+        })
+
+        it('should throw AuthorizationError when threadComment is different owner', async () => {
+          // Arrange
+          await UsersTableTestHelper.addUser({ id: 'user-2', username: 'dicoding 2', fullname: 'Dicoding 2' })
+
+          // Action & Assert
+          return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow(
+            new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1' }), 'user-2'))
+            .rejects
+            .toThrowError(AuthorizationError)
+        })
+
+        it('should not throw when threadComment is same owner', async () => {
+          // Action & Assert
+          return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow(
+            new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1' }), 'user-1'))
+            .resolves.not
+            .toThrow(AuthorizationError)
+        })
+      })
+    })
+
+    describe('and with reply', () => {
+      describe('and thread comment does not exist', () => {
+        it('should throw NotFoundError when threadComment not found', () => {
+          // Action & Assert
+          return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow({ commentId: 'thread_comment-2', threadId: 'thread-1', replyId: 'thread_comment-1' }, 'user-1'))
+            .rejects
+            .toThrowError(NotFoundError)
+        })
+      })
+
+      describe('and thread comment exist', () => {
+        beforeEach(async () => {
+          // Arrange
+          await ThreadsTableTestHelper.addThread({
+            id: 'thread-1',
+            title: 'Tittle Thread',
+            body: 'Body Thread',
+            currentDate: '2023-06-04T13:29:54.057Z',
+            userId: 'user-1'
+          })
+          await ThreadCommentsTableTestHelper.addThreadComment({
+            id: 'thread_comment-1',
+            content: 'comment 1',
+            userId: 'user-1',
+            threadId: 'thread-1'
+          })
+          await ThreadCommentsTableTestHelper.addThreadComment({
+            id: 'thread_comment-2',
+            content: 'comment 2',
+            userId: 'user-1',
+            threadId: 'thread-1',
+            commentId: 'thread_comment-1'
+          })
+        })
+
+        it('should throw AuthorizationError when threadComment is different owner', async () => {
+          // Arrange
+          await UsersTableTestHelper.addUser({ id: 'user-2', username: 'dicoding 2', fullname: 'Dicoding 2' })
+
+          // Action & Assert
+          return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow(
+            new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1', replyId: 'thread_comment-2' }), 'user-2'))
+            .rejects
+            .toThrowError(AuthorizationError)
+        })
+
+        it('should not throw when threadComment is same owner', async () => {
+          // Action & Assert
+          return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow(
+            new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1', replyId: 'thread_comment-2' }), 'user-1'))
+            .resolves.not
+            .toThrow(AuthorizationError)
+        })
+      })
     })
   })
 
   describe('deleteThreadComment function', () => {
-    it('should soft delete threadComment from database', async () => {
+    let threadCommentRepositoryPostgres
+
+    beforeEach(async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding', fullname: 'Dicoding 1' })
       await ThreadsTableTestHelper.addThread({
@@ -164,13 +293,33 @@ describe('ThreadCommentRepositoryPostgres', () => {
         threadId: 'thread-1'
       })
       const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
-      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {}, fakeCurrentDateGenerator)
+      threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {}, fakeCurrentDateGenerator)
+    })
 
+    it('should soft delete threadComment from database', async () => {
       // Action
       await threadCommentRepositoryPostgres.deleteThreadComment(new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1' }), 'user-1')
 
       // Assert
       const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-1', 'thread-1', 'user-1')
+      expect(threadComments).toHaveLength(0)
+    })
+
+    it('should soft delete threadComment with reply from database', async () => {
+      // Arrange
+      await ThreadCommentsTableTestHelper.addThreadComment({
+        id: 'thread_comment-2',
+        content: 'comment 1',
+        userId: 'user-1',
+        threadId: 'thread-1',
+        commentId: 'thread_comment-1'
+      })
+
+      // Action
+      await threadCommentRepositoryPostgres.deleteThreadComment(new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1', replyId: 'thread_comment-2' }), 'user-1')
+
+      // Assert
+      const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-1', 'thread-1', 'user-1', 'thread_comment-2')
       expect(threadComments).toHaveLength(0)
     })
   })

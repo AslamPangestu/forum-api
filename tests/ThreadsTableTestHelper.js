@@ -23,11 +23,9 @@ const ThreadsTestHelper = {
     const query = {
       text: `SELECT ${TABLE_NAME}.id, title, body, ${TABLE_NAME}.created_at AS date, 
         users.username, 
-        thread_comments.id AS comment_id, thread_comments.content, thread_comments.created_at AS comment_at, 
-          (SELECT users.username FROM thread_comments 
-            INNER JOIN users ON thread_comments.user_id = users.id
-            WHERE thread_comments.user_id = users.id) 
-            comment_username
+        thread_comments.id AS comment_id, thread_comments.created_at AS comment_at, thread_comments.comment_id AS reply_id, 
+        CASE WHEN thread_comments.soft_delete_at IS NULL THEN thread_comments.content ELSE '**komentar telah dihapus**' END AS comment_content, 
+        (SELECT users.username FROM users WHERE users.id = thread_comments.user_id) comment_username
         FROM ${TABLE_NAME} 
         LEFT JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id
         INNER JOIN users ON ${TABLE_NAME}.user_id = users.id
