@@ -13,8 +13,8 @@ const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres')
 
 describe('ThreadRepositoryPostgres', () => {
   afterEach(async () => {
-    await ThreadsTableTestHelper.cleanTable()
     await ThreadCommentsTableTestHelper.cleanTable()
+    await ThreadsTableTestHelper.cleanTable()
     await UsersTableTestHelper.cleanTable()
   })
 
@@ -118,13 +118,12 @@ describe('ThreadRepositoryPostgres', () => {
 
         // Action & Assert
         const thread = await threadRepositoryPostgres.findThreadById('thread-1')
-        console.log(thread)
         expect(thread).toEqual(new GetThread([
           {
             id: 'thread-1',
             title: 'Tittle Thread',
             body: 'Body Thread',
-            created_at: '2023-06-04T13:29:54.057Z',
+            created_at: '2023-06-04T06:29:54.057Z',
             username: 'dicoding',
             comment_id: null,
             comment_content: null,
@@ -142,7 +141,7 @@ describe('ThreadRepositoryPostgres', () => {
             comment_id: 'thread_comment-1',
             comment_content: 'comment 1',
             comment_username: 'dicoding',
-            comment_at: '2023-06-04T13:29:54.057Z',
+            comment_at: '2023-06-04T06:29:54.057Z',
             reply_id: null
           },
           {
@@ -154,7 +153,7 @@ describe('ThreadRepositoryPostgres', () => {
             comment_id: 'thread_comment-2',
             comment_content: 'comment 1',
             comment_username: 'dicoding',
-            comment_at: '2023-06-04T13:29:54.057Z',
+            comment_at: '2023-06-04T06:29:54.057Z',
             reply_id: 'thread_comment-1'
           }
         ]))

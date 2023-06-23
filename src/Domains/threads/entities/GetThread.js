@@ -5,7 +5,7 @@ class GetThread {
     this.id = payloads[0].id
     this.title = payloads[0].title
     this.body = payloads[0].body
-    this.date = new Date(payloads[0].created_at).toISOString()
+    this.date = this._convertDateToString(payloads[0].created_at)
     this.username = payloads[0].username
     this.comments = this._generateComments(payloads)
   }
@@ -44,15 +44,19 @@ class GetThread {
     return comments.map((item) => ({
       id: item.comment_id,
       username: item.comment_username,
-      date: item.comment_at,
+      date: this._convertDateToString(item.comment_at),
       content: generateComment(item.comment_delete_at, item.comment_content, '**komentar telah dihapus**'),
       replies: payloads.filter(({ reply_id }) => reply_id && reply_id === item.comment_id).map(subitem => ({
         id: subitem.comment_id,
         username: subitem.comment_username,
-        date: subitem.comment_at,
+        date: this._convertDateToString(subitem.comment_at),
         content: generateComment(subitem.comment_delete_at, subitem.comment_content, '**balasan telah dihapus**')
       }))
     }))
+  }
+
+  _convertDateToString (value) {
+    return new Date(value).toISOString()
   }
 }
 
