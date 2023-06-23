@@ -15,7 +15,7 @@ describe('GetThread entities', () => {
       {
         id: 'thread-1',
         title: 'Tittle Thread',
-        date: '2023-06-04T13:29:54.057Z'
+        created_at: '2023-06-04T13:29:54.057Z'
       }
     ]
 
@@ -30,7 +30,7 @@ describe('GetThread entities', () => {
         id: true,
         title: 1,
         body: 21,
-        date: '2023-06-04T13:29:54.057Z',
+        created_at: '2023-06-04T13:29:54.057Z',
         comment_id: {},
         username: []
       }
@@ -47,7 +47,7 @@ describe('GetThread entities', () => {
         id: 'thread-1',
         title: 'Tittle Thread',
         body: 'Body Thread',
-        date: '2023-06-04T13:29:54.057Z',
+        created_at: '2023-06-04T13:29:54.057Z',
         username: 'dicoding',
         comment_id: null,
         comment_content: null,
@@ -64,7 +64,7 @@ describe('GetThread entities', () => {
     expect(thread.id).toEqual(payload[0].id)
     expect(thread.title).toEqual(payload[0].title)
     expect(thread.body).toEqual(payload[0].body)
-    expect(thread.date).toEqual(payload[0].date)
+    expect(thread.date).toEqual(payload[0].created_at)
     expect(thread.username).toEqual(payload[0].username)
     expect(thread.comments).toBeInstanceOf(Array)
     expect(thread.comments).toHaveLength(0)
@@ -77,7 +77,7 @@ describe('GetThread entities', () => {
         id: 'thread-1',
         title: 'Tittle Thread',
         body: 'Body Thread',
-        date: '2023-06-04T13:29:54.057Z',
+        created_at: '2023-06-04T13:29:54.057Z',
         username: 'dicoding',
         comment_id: null,
         comment_content: null,
@@ -89,7 +89,7 @@ describe('GetThread entities', () => {
         id: 'thread-1',
         title: 'Tittle Thread',
         body: 'Body Thread',
-        date: '2023-06-04T13:29:54.057Z',
+        created_at: '2023-06-04T13:29:54.057Z',
         username: 'dicoding',
         comment_id: 'thread_comment-1',
         comment_content: 'comment 1',
@@ -101,7 +101,7 @@ describe('GetThread entities', () => {
         id: 'thread-1',
         title: 'Tittle Thread',
         body: 'Body Thread',
-        date: '2023-06-04T13:29:54.057Z',
+        created_at: '2023-06-04T13:29:54.057Z',
         username: 'dicoding',
         comment_id: 'thread_comment-2',
         comment_content: 'comment 1',
@@ -119,10 +119,24 @@ describe('GetThread entities', () => {
     expect(thread.id).toEqual(payload[0].id)
     expect(thread.title).toEqual(payload[0].title)
     expect(thread.body).toEqual(payload[0].body)
-    expect(thread.date).toEqual(payload[0].date)
+    expect(thread.date).toEqual(payload[0].created_at)
     expect(thread.username).toEqual(payload[0].username)
     expect(thread.comments).toBeInstanceOf(Array)
     expect(thread.comments).toHaveLength(1)
-    // TODO: Implement List Comments with Replies
+
+    const comment = thread.comments[0]
+    expect(comment.id).toEqual(payload[1].comment_id)
+    expect(comment.username).toEqual(payload[1].comment_username)
+    expect(comment.date).toEqual(payload[1].comment_at)
+    expect(comment.content).toEqual(payload[1].comment_content)
+    expect(comment.replies).toBeInstanceOf(Array)
+    expect(comment.replies).toHaveLength(1)
+
+
+    const reply = comment.replies[0]
+    expect(reply.id).toEqual(payload[2].comment_id)
+    expect(reply.username).toEqual(payload[2].comment_username)
+    expect(reply.date).toEqual(payload[2].comment_at)
+    expect(reply.content).toEqual(payload[2].comment_content)
   })
 })

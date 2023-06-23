@@ -29,7 +29,7 @@ class ThreadRepositoryPostgres extends IThreadRepository {
 
   async findThreadById (id) {
     const query = {
-      text: `SELECT ${TABLE_NAME}.id, title, body, ${TABLE_NAME}.created_at AS date, 
+      text: `SELECT ${TABLE_NAME}.id, title, body, ${TABLE_NAME}.created_at, 
         users.username, 
         thread_comments.id AS comment_id, thread_comments.created_at AS comment_at, thread_comments.comment_id AS reply_id, 
         CASE 

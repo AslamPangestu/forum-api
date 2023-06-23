@@ -20,19 +20,21 @@ describe('a DeleteThreadComment entities', () => {
     expect(() => new DeleteThreadComment(payload)).toThrowError('DELETE_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION')
   })
 
-  it('should create addComment object correctly', () => {
+  it('should create deleteComment object correctly', () => {
     // Arrange
     const payload = {
-      commentId: 'thread_comment-1',
-      threadId: 'thread-1'
+      commentId: 'thread_comment-2',
+      threadId: 'thread-1',
+      replyId: 'thread_comment-1',
     }
 
     // Action
-    const addComment = new DeleteThreadComment(payload)
+    const deleteComment = new DeleteThreadComment(payload)
 
     // Assert
-    expect(addComment).toBeInstanceOf(DeleteThreadComment)
-    expect(addComment.commentId).toEqual(payload.commentId)
-    expect(addComment.threadId).toEqual(payload.threadId)
+    expect(deleteComment).toBeInstanceOf(DeleteThreadComment)
+    expect(deleteComment.commentId).toEqual(payload.commentId)
+    expect(deleteComment.threadId).toEqual(payload.threadId)
+    expect(deleteComment.replyId).toEqual(payload.replyId)
   })
 })

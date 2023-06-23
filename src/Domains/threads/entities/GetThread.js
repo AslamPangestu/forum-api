@@ -5,7 +5,7 @@ class GetThread {
     this.id = payloads[0].id
     this.title = payloads[0].title
     this.body = payloads[0].body
-    this.date = new Date(payloads[0].date).toISOString()
+    this.date = new Date(payloads[0].created_at).toISOString()
     this.username = payloads[0].username
     this.comments = this._generateComments(payloads)
   }
@@ -18,7 +18,7 @@ class GetThread {
     const id = payloads[0].id
     const title = payloads[0].title
     const body = payloads[0].body
-    const date = new Date(payloads[0].date).toString()
+    const date = new Date(payloads[0].created_at).toString()
     const username = payloads[0].username
 
     if (!id || !username || !title || !body || !date) {
