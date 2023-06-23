@@ -1,4 +1,5 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper')
+const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper')
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
 
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError')
@@ -13,6 +14,7 @@ const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres')
 describe('ThreadRepositoryPostgres', () => {
   afterEach(async () => {
     await ThreadsTableTestHelper.cleanTable()
+    await ThreadCommentsTableTestHelper.cleanTable()
     await UsersTableTestHelper.cleanTable()
   })
 
@@ -64,34 +66,99 @@ describe('ThreadRepositoryPostgres', () => {
         .toThrowError(NotFoundError)
     })
 
-    it('should return thread data when thread is found', async () => {
-      // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding' })
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-1',
-        title: 'Tittle Thread',
-        body: 'Body Thread',
-        currentDate: '2023-06-04T13:29:54.057Z',
-        userId: 'user-1'
-      })
+    describe('thread found', () => {
+      let threadRepositoryPostgres
 
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {})
-
-      // Action & Assert
-      const thread = await threadRepositoryPostgres.findThreadById('thread-1')
-      expect(thread).toEqual(new GetThread([
-        {
+      beforeEach(async () => {
+        await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding' })
+        await ThreadsTableTestHelper.addThread({
           id: 'thread-1',
           title: 'Tittle Thread',
           body: 'Body Thread',
-          created_at: '2023-06-04T06:29:54.057Z',
-          username: 'dicoding',
-          comment_id: null,
-          comment_content: null,
-          comment_username: null,
-          comment_at: null
-        }
-      ]))
+          currentDate: '2023-06-04T13:29:54.057Z',
+          userId: 'user-1'
+        })
+
+        threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {})
+      })
+
+      it('should return thread data', async () => {
+        // Action & Assert
+        const thread = await threadRepositoryPostgres.findThreadById('thread-1')
+        expect(thread).toEqual(new GetThread([
+          {
+            id: 'thread-1',
+            title: 'Tittle Thread',
+            body: 'Body Thread',
+            created_at: '2023-06-04T06:29:54.057Z',
+            username: 'dicoding',
+            comment_id: null,
+            comment_content: null,
+            comment_username: null,
+            comment_at: null
+          }
+        ]))
+      })
+
+      it('should return thread data with comment when have comment', async () => {
+        // Arrange
+        await ThreadCommentsTableTestHelper.addThreadComment({
+          id: 'thread_comment-1',
+          content: 'comment 1',
+          userId: 'user-1',
+          threadId: 'thread-1'
+        })
+        await ThreadCommentsTableTestHelper.addThreadComment({
+          id: 'thread_comment-2',
+          content: 'comment 1',
+          userId: 'user-1',
+          threadId: 'thread-1',
+          commentId: 'thread_comment-1'
+        })
+
+        // Action & Assert
+        const thread = await threadRepositoryPostgres.findThreadById('thread-1')
+        console.log(thread)
+        expect(thread).toEqual(new GetThread([
+          {
+            id: 'thread-1',
+            title: 'Tittle Thread',
+            body: 'Body Thread',
+            created_at: '2023-06-04T13:29:54.057Z',
+            username: 'dicoding',
+            comment_id: null,
+            comment_content: null,
+            comment_at: null,
+            comment_username: null,
+            comment_delete_at: null,
+            reply_id: null
+          },
+          {
+            id: 'thread-1',
+            title: 'Tittle Thread',
+            body: 'Body Thread',
+            created_at: '2023-06-04T06:29:54.057Z',
+            username: 'dicoding',
+            comment_id: 'thread_comment-1',
+            comment_content: 'comment 1',
+            comment_username: 'dicoding',
+            comment_at: '2023-06-04T13:29:54.057Z',
+            reply_id: null
+          },
+          {
+            id: 'thread-1',
+            title: 'Tittle Thread',
+            body: 'Body Thread',
+            created_at: '2023-06-04T06:29:54.057Z',
+            username: 'dicoding',
+            comment_id: 'thread_comment-2',
+            comment_content: 'comment 1',
+            comment_username: 'dicoding',
+            comment_at: '2023-06-04T13:29:54.057Z',
+            reply_id: 'thread_comment-1'
+          }
+        ]))
+      })
     })
   })
 })

@@ -20,11 +20,12 @@ const ThreadCommentsTableTestHelper = {
   },
 
   async findThreadComment (id, threadId, userId, commentId) {
-    let baseQuery = `SELECT * FROM ${TABLE_NAME} WHERE id = $1 AND thread_id = $2 AND soft_delete_at IS NULL AND user_id = $3`
+    let baseQuery = `SELECT * FROM ${TABLE_NAME} WHERE id = $1 AND thread_id = $2 AND user_id = $3`
     const baseParam = [id, threadId, userId]
     if (commentId) {
       baseQuery += ' AND comment_id = $4'
-      baseParam.push(commentId)
+      baseParam[0] = commentId
+      baseParam.push(id)
     }
     const query = {
       text: baseQuery,

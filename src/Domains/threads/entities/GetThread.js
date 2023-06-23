@@ -35,16 +35,22 @@ class GetThread {
       return []
     }
     const comments = payloads.filter(({ comment_id, reply_id }) => comment_id && !reply_id)
+    const generateComment = (isDelete, content, defaut) => {
+      if (isDelete) {
+        return defaut
+      }
+      return content
+    }
     return comments.map((item) => ({
       id: item.comment_id,
       username: item.comment_username,
       date: item.comment_at,
-      content: item.comment_content,
+      content: generateComment(item.comment_delete_at, item.comment_content, '**komentar telah dihapus**'),
       replies: payloads.filter(({ reply_id }) => reply_id && reply_id === item.comment_id).map(subitem => ({
         id: subitem.comment_id,
         username: subitem.comment_username,
         date: subitem.comment_at,
-        content: subitem.comment_content
+        content: generateComment(subitem.comment_delete_at, subitem.comment_content, '**balasan telah dihapus**')
       }))
     }))
   }

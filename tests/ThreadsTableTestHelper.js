@@ -24,11 +24,7 @@ const ThreadsTestHelper = {
       text: `SELECT ${TABLE_NAME}.id, title, body, ${TABLE_NAME}.created_at, 
         users.username, 
         thread_comments.id AS comment_id, thread_comments.created_at AS comment_at, thread_comments.comment_id AS reply_id, 
-        CASE 
-          WHEN thread_comments.soft_delete_at IS NOT NULL AND thread_comments.comment_id IS NULL THEN '**komentar telah dihapus**' 
-          WHEN thread_comments.soft_delete_at IS NOT NULL AND thread_comments.comment_id IS NOT NULL THEN '**balasan telah dihapus**' 
-          ELSE thread_comments.content 
-        END AS comment_content, 
+        thread_comments.soft_delete_at AS comment_delete_at, thread_comments.content AS comment_content, 
         (SELECT users.username FROM users WHERE users.id = thread_comments.user_id) comment_username
         FROM ${TABLE_NAME} 
         LEFT JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id

@@ -83,6 +83,7 @@ describe('GetThread entities', () => {
         comment_content: null,
         comment_at: null,
         comment_username: null,
+        comment_delete_at: null,
         reply_id: null
       },
       {
@@ -95,6 +96,7 @@ describe('GetThread entities', () => {
         comment_content: 'comment 1',
         comment_at: '2023-06-04T13:29:54.057Z',
         comment_username: 'dicoding',
+        comment_delete_at: null,
         reply_id: null
       },
       {
@@ -107,7 +109,34 @@ describe('GetThread entities', () => {
         comment_content: 'comment 1',
         comment_at: '2023-06-04T13:29:54.057Z',
         comment_username: 'dicoding',
+        comment_delete_at: null,
         reply_id: 'thread_comment-1'
+      },
+      {
+        id: 'thread-1',
+        title: 'Tittle Thread',
+        body: 'Body Thread',
+        created_at: '2023-06-04T13:29:54.057Z',
+        username: 'dicoding',
+        comment_id: 'thread_comment-3',
+        comment_content: 'comment 1',
+        comment_at: '2023-06-04T13:29:54.057Z',
+        comment_username: 'dicoding',
+        comment_delete_at: '2023-06-04T13:29:54.057Z',
+        reply_id: 'thread_comment-1'
+      },
+      {
+        id: 'thread-1',
+        title: 'Tittle Thread',
+        body: 'Body Thread',
+        created_at: '2023-06-04T13:29:54.057Z',
+        username: 'dicoding',
+        comment_id: 'thread_comment-4',
+        comment_content: 'comment 1',
+        comment_at: '2023-06-04T13:29:54.057Z',
+        comment_username: 'dicoding',
+        comment_delete_at: '2023-06-04T13:29:54.057Z',
+        reply_id: null
       }
     ]
 
@@ -122,7 +151,7 @@ describe('GetThread entities', () => {
     expect(thread.date).toEqual(payload[0].created_at)
     expect(thread.username).toEqual(payload[0].username)
     expect(thread.comments).toBeInstanceOf(Array)
-    expect(thread.comments).toHaveLength(1)
+    expect(thread.comments).toHaveLength(2)
 
     const comment = thread.comments[0]
     expect(comment.id).toEqual(payload[1].comment_id)
@@ -130,13 +159,24 @@ describe('GetThread entities', () => {
     expect(comment.date).toEqual(payload[1].comment_at)
     expect(comment.content).toEqual(payload[1].comment_content)
     expect(comment.replies).toBeInstanceOf(Array)
-    expect(comment.replies).toHaveLength(1)
-
+    expect(comment.replies).toHaveLength(2)
 
     const reply = comment.replies[0]
     expect(reply.id).toEqual(payload[2].comment_id)
     expect(reply.username).toEqual(payload[2].comment_username)
     expect(reply.date).toEqual(payload[2].comment_at)
     expect(reply.content).toEqual(payload[2].comment_content)
+
+    const deletedReply = comment.replies[1]
+    expect(deletedReply.id).toEqual(payload[3].comment_id)
+    expect(deletedReply.username).toEqual(payload[3].comment_username)
+    expect(deletedReply.date).toEqual(payload[3].comment_at)
+    expect(deletedReply.content).toEqual('**balasan telah dihapus**')
+
+    const deletedComment = thread.comments[1]
+    expect(deletedComment.id).toEqual(payload[4].comment_id)
+    expect(deletedComment.username).toEqual(payload[4].comment_username)
+    expect(deletedComment.date).toEqual(payload[4].comment_at)
+    expect(deletedComment.content).toEqual('**komentar telah dihapus**')
   })
 })

@@ -143,7 +143,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
           await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
 
           // Assert
-          const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-2', 'thread-1', 'user-1', 'thread_comment-1')
+          const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-1', 'thread-1', 'user-1', 'thread_comment-2')
           expect(threadComments.length).toBeGreaterThan(0)
         })
 
@@ -302,7 +302,8 @@ describe('ThreadCommentRepositoryPostgres', () => {
 
       // Assert
       const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-1', 'thread-1', 'user-1')
-      expect(threadComments).toHaveLength(0)
+      expect(threadComments).toHaveLength(1)
+      expect(threadComments.soft_delete_at).not.toBeNull()
     })
 
     it('should soft delete threadComment with reply from database', async () => {
@@ -320,7 +321,8 @@ describe('ThreadCommentRepositoryPostgres', () => {
 
       // Assert
       const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-1', 'thread-1', 'user-1', 'thread_comment-2')
-      expect(threadComments).toHaveLength(0)
+      expect(threadComments).toHaveLength(1)
+      expect(threadComments.soft_delete_at).not.toBeNull()
     })
   })
 })

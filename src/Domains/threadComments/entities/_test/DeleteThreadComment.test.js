@@ -20,7 +20,24 @@ describe('a DeleteThreadComment entities', () => {
     expect(() => new DeleteThreadComment(payload)).toThrowError('DELETE_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION')
   })
 
-  it('should create deleteComment object correctly when does not have reply', () => {
+  it('should create deleteComment object correctly', () => {
+    // Arrange
+    const payload = {
+      commentId: 'thread_comment-1',
+      threadId: 'thread-1'
+    }
+
+    // Action
+    const deleteComment = new DeleteThreadComment(payload)
+
+    // Assert
+    expect(deleteComment).toBeInstanceOf(DeleteThreadComment)
+    expect(deleteComment.commentId).toEqual(payload.commentId)
+    expect(deleteComment.threadId).toEqual(payload.threadId)
+    expect(deleteComment.replyId).toBeNull()
+  })
+
+  it('should create deleteComment object correctly when does have reply', () => {
     // Arrange
     const payload = {
       commentId: 'thread_comment-2',
@@ -36,21 +53,5 @@ describe('a DeleteThreadComment entities', () => {
     expect(deleteComment.commentId).toEqual(payload.commentId)
     expect(deleteComment.threadId).toEqual(payload.threadId)
     expect(deleteComment.replyId).toEqual(payload.replyId)
-  })
-
-  it('should create deleteComment object correctly when does have reply', () => {
-    // Arrange
-    const payload = {
-      commentId: 'thread_comment-2',
-      threadId: 'thread-1'
-    }
-
-    // Action
-    const deleteComment = new DeleteThreadComment(payload)
-
-    // Assert
-    expect(deleteComment).toBeInstanceOf(DeleteThreadComment)
-    expect(deleteComment.commentId).toEqual(payload.commentId)
-    expect(deleteComment.threadId).toEqual(payload.threadId)
   })
 })

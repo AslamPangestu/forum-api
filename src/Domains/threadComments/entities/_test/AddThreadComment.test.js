@@ -34,6 +34,7 @@ describe('a AddThreadComment entities', () => {
     expect(addComment).toBeInstanceOf(AddThreadComment)
     expect(addComment.content).toEqual(payload.content)
     expect(addComment.threadId).toEqual(payload.threadId)
+    expect(addComment.commentId).toBeNull()
   })
 
   it('should create addComment with reply object correctly', () => {
