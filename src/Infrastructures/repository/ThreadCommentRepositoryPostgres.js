@@ -13,6 +13,7 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
     this._currentDateGenerator = currentDateGenerator
   }
 
+  // TODO: Handle error
   async addThreadComment (addThreadComment, userId) {
     const { content, threadId } = addThreadComment
     const generatedId = this._idGenerator('thread_comments')
