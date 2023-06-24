@@ -17,17 +17,16 @@ describe('GetThreadUseCase', () => {
     const mockThreadRepository = new IThreadRepository()
 
     /** mocking needed function */
-    mockThreadRepository.findThreadById = jest.fn()
-      .mockImplementation(() => Promise.resolve(new GetThread([
-        {
-          id: 'thread-1',
-          title: 'Tittle Thread',
-          body: 'Body Thread',
-          created_at: '2023-06-04T13:29:54.057Z',
-          user_id: 'user-1',
-          username: 'dicoding'
-        }
-      ])))
+    mockThreadRepository.findThreadById = jest.fn(() => Promise.resolve(new GetThread([
+      {
+        id: 'thread-1',
+        title: 'Tittle Thread',
+        body: 'Body Thread',
+        created_at: '2023-06-04T13:29:54.057Z',
+        user_id: 'user-1',
+        username: 'dicoding'
+      }
+    ])))
 
     /** creating use case instance */
     const getThreadUseCase = new GetThreadUseCase({
