@@ -18,7 +18,7 @@ class GetThread {
     const id = payloads[0].id
     const title = payloads[0].title
     const body = payloads[0].body
-    const date = new Date(payloads[0].created_at).toString()
+    const date = this._convertDateToString(payloads[0].created_at)
     const username = payloads[0].username
 
     if (!id || !username || !title || !body || !date) {
