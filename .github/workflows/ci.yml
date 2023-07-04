@@ -44,12 +44,12 @@ jobs:
         npm run test
       env:
         CI: true
-        PGHOST_TEST: postgres
+        PGHOST_TEST: 0.0.0.0
         PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
         PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
         PGPASSWORD_TEST: ${{ secrets.PGPASSWORD_TEST }}
         PGPORT_TEST: ${{ secrets.PGPORT_TEST }}
-        PGHOST: postgres
+        PGHOST: 0.0.0.0
         PGUSER: ${{ secrets.PGUSER_TEST }}
         PGDATABASE: ${{ secrets.PGDATABASE_TEST }}
         PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
