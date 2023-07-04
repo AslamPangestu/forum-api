@@ -24,7 +24,11 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD_TEST }}
           POSTGRES_USER: ${{ secrets.PGUSER_TEST }}
           POSTGRES_DB: ${{ secrets.PGDATABASE_TEST }}
+          POSTGRES_PORT: ${{ secrets.PGPORT_TEST }}
         # Set health checks to wait until postgres has started
+        ports:
+          # maps tcp port 5432 on service container to the host
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -44,12 +48,12 @@ jobs:
         npm run test
       env:
         CI: true
-        PGHOST_TEST: 0.0.0.0
+        PGHOST_TEST: localhost
         PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
         PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
         PGPASSWORD_TEST: ${{ secrets.PGPASSWORD_TEST }}
         PGPORT_TEST: ${{ secrets.PGPORT_TEST }}
-        PGHOST: 0.0.0.0
+        PGHOST: localhost
         PGUSER: ${{ secrets.PGUSER_TEST }}
         PGDATABASE: ${{ secrets.PGDATABASE_TEST }}
         PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
