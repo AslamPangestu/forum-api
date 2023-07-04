@@ -25,6 +25,8 @@ jobs:
           POSTGRES_USER: ${{ secrets.PGUSER_TEST }}
           POSTGRES_DB: ${{ secrets.PGDATABASE_TEST }}
           POSTGRES_PORT: ${{ secrets.PGPORT_TEST }}
+          TZ: 'GMT+7'
+          PGTZ: 'GMT+7'
         # Set health checks to wait until postgres has started
         ports:
           # maps tcp port 5432 on service container to the host
