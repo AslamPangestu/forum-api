@@ -116,7 +116,6 @@ describe('ThreadRepositoryPostgres', () => {
 
         // Action & Assert
         const thread = await threadRepositoryPostgres.findThreadById('thread-1')
-        console.log(thread)
         expect(thread).toEqual(new GetThread([
           {
             id: 'thread-1',
