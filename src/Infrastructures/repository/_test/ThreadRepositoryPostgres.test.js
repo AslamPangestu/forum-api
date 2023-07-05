@@ -33,8 +33,7 @@ describe('ThreadRepositoryPostgres', () => {
         body: 'Body Thread'
       })
       const fakeIdGenerator = () => 'thread-1' // stub!
-      const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
-      threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
+      threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator)
     })
 
     it('should persist thread and return thread correctly', async () => {
@@ -75,7 +74,6 @@ describe('ThreadRepositoryPostgres', () => {
           id: 'thread-1',
           title: 'Tittle Thread',
           body: 'Body Thread',
-          currentDate: '2023-06-04T13:29:54.057Z',
           userId: 'user-1'
         })
 
@@ -90,7 +88,7 @@ describe('ThreadRepositoryPostgres', () => {
             id: 'thread-1',
             title: 'Tittle Thread',
             body: 'Body Thread',
-            created_at: '2023-06-04T06:29:54.057Z',
+            created_at: thread.date,
             username: 'dicoding',
             comment_id: null,
             comment_content: null,
@@ -123,7 +121,7 @@ describe('ThreadRepositoryPostgres', () => {
             id: 'thread-1',
             title: 'Tittle Thread',
             body: 'Body Thread',
-            created_at: '2023-06-04T06:29:54.057Z',
+            created_at: thread.date,
             username: 'dicoding',
             comment_id: null,
             comment_content: null,
@@ -136,24 +134,24 @@ describe('ThreadRepositoryPostgres', () => {
             id: 'thread-1',
             title: 'Tittle Thread',
             body: 'Body Thread',
-            created_at: '2023-06-04T06:29:54.057Z',
+            created_at: thread.date,
             username: 'dicoding',
             comment_id: 'thread_comment-1',
             comment_content: 'comment 1',
             comment_username: 'dicoding',
-            comment_at: '2023-06-04T06:29:54.057Z',
+            comment_at: thread.comments[0].date,
             reply_id: null
           },
           {
             id: 'thread-1',
             title: 'Tittle Thread',
             body: 'Body Thread',
-            created_at: '2023-06-04T06:29:54.057Z',
+            created_at: thread.date,
             username: 'dicoding',
             comment_id: 'thread_comment-2',
             comment_content: 'comment 1',
             comment_username: 'dicoding',
-            comment_at: '2023-06-04T06:29:54.057Z',
+            comment_at: thread.comments[0].replies[0].date,
             reply_id: 'thread_comment-1'
           }
         ]))

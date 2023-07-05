@@ -10,7 +10,6 @@ class ThreadRepositoryPostgres extends IThreadRepository {
     super()
     this._pool = pool
     this._idGenerator = idGenerator
-    this._currentDateGenerator = currentDateGenerator
   }
 
   async addThread (addThread, userId) {
@@ -18,8 +17,8 @@ class ThreadRepositoryPostgres extends IThreadRepository {
     const generatedId = this._idGenerator('thread')
 
     const query = {
-      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $4, $4, $5) RETURNING id, title`,
-      values: [generatedId, title, body, this._currentDateGenerator(), userId]
+      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, NOW(), NOW(), $4) RETURNING id, title`,
+      values: [generatedId, title, body, userId]
     }
 
     const result = await this._pool.query(query)

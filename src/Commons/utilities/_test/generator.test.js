@@ -1,14 +1,6 @@
-const { generateCurrentDate, generateId } = require('../generator')
+const { generateId } = require('../generator')
 
 describe('Generate data', () => {
-  describe('generate current data', () => {
-    it('should create current data with iso format correctly', () => {
-      const currentDate = generateCurrentDate()
-
-      expect(new Date(currentDate).toString()).not.toEqual('Invalid Date')
-    })
-  })
-
   describe('generate random id', () => {
     it('should throw error when tabelName empty', () => {
       expect(() => generateId()).toThrowError('tableName required')

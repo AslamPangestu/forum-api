@@ -2,7 +2,6 @@
 
 const TABLE_NAME = 'thread_comments'
 
-// TODO: HAndle Create/Update At
 exports.up = pgm => {
   pgm.createTable(TABLE_NAME, {
     id: {
