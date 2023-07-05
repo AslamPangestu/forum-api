@@ -35,8 +35,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
       beforeEach(async () => {
         // Arrange
         const fakeIdGenerator = () => 'thread_comment-1' // stub!
-        const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
-        threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
+        threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator)
       })
 
       describe('and thread does not exist', () => {
@@ -100,8 +99,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
           userId: 'user-1'
         })
         const fakeIdGenerator = () => 'thread_comment-2' // stub!
-        const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
-        threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
+        threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator)
       })
 
       describe('and thread comment does not exist', () => {
@@ -184,7 +182,6 @@ describe('ThreadCommentRepositoryPostgres', () => {
             id: 'thread-1',
             title: 'Tittle Thread',
             body: 'Body Thread',
-            currentDate: '2023-06-04T13:29:54.057Z',
             userId: 'user-1'
           })
           await ThreadCommentsTableTestHelper.addThreadComment({
@@ -233,7 +230,6 @@ describe('ThreadCommentRepositoryPostgres', () => {
             id: 'thread-1',
             title: 'Tittle Thread',
             body: 'Body Thread',
-            currentDate: '2023-06-04T13:29:54.057Z',
             userId: 'user-1'
           })
           await ThreadCommentsTableTestHelper.addThreadComment({
@@ -283,7 +279,6 @@ describe('ThreadCommentRepositoryPostgres', () => {
         id: 'thread-1',
         title: 'Tittle Thread',
         body: 'Body Thread',
-        currentDate: '2023-06-04T13:29:54.057Z',
         userId: 'user-1'
       })
       await ThreadCommentsTableTestHelper.addThreadComment({
@@ -292,8 +287,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
         userId: 'user-1',
         threadId: 'thread-1'
       })
-      const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
-      threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {}, fakeCurrentDateGenerator)
+      threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {})
     })
 
     it('should soft delete threadComment from database', async () => {

@@ -5,7 +5,7 @@ const { createContainer } = require('instances-container')
 const bcrypt = require('bcrypt')
 const Jwt = require('@hapi/jwt')
 
-const { generateId, generateCurrentDate } = require('../Commons/utilities/generator')
+const { generateId } = require('../Commons/utilities/generator')
 const pool = require('./database/postgres/pool')
 
 // service (repository, helper, manager, etc)
@@ -53,9 +53,6 @@ container.register([
         },
         {
           concrete: generateId
-        },
-        {
-          concrete: generateCurrentDate
         }
       ]
     }
@@ -70,9 +67,6 @@ container.register([
         },
         {
           concrete: generateId
-        },
-        {
-          concrete: generateCurrentDate
         }
       ]
     }
@@ -87,9 +81,6 @@ container.register([
         },
         {
           concrete: generateId
-        },
-        {
-          concrete: generateCurrentDate
         }
       ]
     }

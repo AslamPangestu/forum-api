@@ -7,7 +7,6 @@ class UserRepositoryPostgres extends IUserRepository {
     super()
     this._pool = pool
     this._idGenerator = idGenerator
-    this._currentDateGenerator = currentDateGenerator
   }
 
   async verifyAvailableUsername (username) {
@@ -26,11 +25,10 @@ class UserRepositoryPostgres extends IUserRepository {
   async addUser (registerUser) {
     const { username, password, fullname } = registerUser
     const id = this._idGenerator('user')
-    const currentDate = this._currentDateGenerator()
 
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5, $5) RETURNING id, username, fullname',
-      values: [id, username, password, fullname, currentDate]
+      text: 'INSERT INTO users VALUES($1, $2, $3, $4, NOW(), NOW()) RETURNING id, username, fullname',
+      values: [id, username, password, fullname]
     }
 
     const result = await this._pool.query(query)

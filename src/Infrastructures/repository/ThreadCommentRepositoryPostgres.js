@@ -10,7 +10,6 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
     super()
     this._pool = pool
     this._idGenerator = idGenerator
-    this._currentDateGenerator = currentDateGenerator
   }
 
   // TODO: Handle error
@@ -19,8 +18,8 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
     const generatedId = this._idGenerator('thread_comments')
 
     const query = {
-      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $3, NULL, $4, $5, $6) RETURNING id, content`,
-      values: [generatedId, content, this._currentDateGenerator(), userId, threadId, addThreadComment?.commentId || null]
+      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, NOW(), NOW(), NULL, $3, $4, $5) RETURNING id, content`,
+      values: [generatedId, content, userId, threadId, addThreadComment?.commentId || null]
     }
 
     try {
@@ -62,10 +61,10 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
 
   async deleteThreadComment (deleteThreadComment, userId) {
     const { commentId, threadId } = deleteThreadComment
-    let baseQuery = `UPDATE ${TABLE_NAME} SET soft_delete_at = $2 WHERE id = $1 AND thread_id = $3 AND soft_delete_at IS NULL AND user_id = $4`
-    const baseParam = [commentId, this._currentDateGenerator(), threadId, userId]
+    let baseQuery = `UPDATE ${TABLE_NAME} SET soft_delete_at = NOW() WHERE id = $1 AND thread_id = $2 AND soft_delete_at IS NULL AND user_id = $3`
+    const baseParam = [commentId, threadId, userId]
     if (deleteThreadComment?.replyId) {
-      baseQuery += ' AND comment_id = $5'
+      baseQuery += ' AND comment_id = $4'
       baseParam[0] = deleteThreadComment?.replyId
       baseParam.push(deleteThreadComment.commentId)
     }

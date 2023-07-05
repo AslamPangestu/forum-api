@@ -8,12 +8,11 @@ const ThreadsTestHelper = {
     id = 'thread-1',
     title = 'Tittle Thread',
     body = 'Body Thread',
-    currentDate = '2023-06-04T13:29:54.057Z',
     userId = 'user-1'
   }) {
     const query = {
-      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $4, $4, $5)`,
-      values: [id, title, body, currentDate, userId]
+      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, NOW(), NOW(), $4)`,
+      values: [id, title, body, userId]
     }
 
     await pool.query(query)

@@ -8,12 +8,11 @@ const UsersTableTestHelper = {
     id = 'user-1',
     username = 'dicoding',
     password = 'secret',
-    fullname = 'Dicoding Indonesia',
-    currentDate = '2023-06-04T13:29:54.057Z'
+    fullname = 'Dicoding Indonesia'
   }) {
     const query = {
-      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $4, $5, $5)`,
-      values: [id, username, password, fullname, currentDate]
+      text: `INSERT INTO ${TABLE_NAME} VALUES($1, $2, $3, $4, NOW(), NOW())`,
+      values: [id, username, password, fullname]
     }
 
     await pool.query(query)

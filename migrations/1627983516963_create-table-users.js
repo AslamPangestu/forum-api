@@ -1,6 +1,5 @@
 const TABLE_NAME = 'users'
 
-// TODO: HAndle Create/Update At
 exports.up = (pgm) => {
   pgm.createTable(TABLE_NAME, {
     id: {

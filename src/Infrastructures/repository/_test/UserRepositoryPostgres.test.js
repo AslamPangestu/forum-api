@@ -44,8 +44,7 @@ describe('UserRepositoryPostgres', () => {
         fullname: 'Dicoding Indonesia'
       })
       const fakeIdGenerator = () => 'user-1' // stub!
-      const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, fakeIdGenerator)
 
       // Action
       await userRepositoryPostgres.addUser(registerUser)
@@ -63,8 +62,7 @@ describe('UserRepositoryPostgres', () => {
         fullname: 'Dicoding Indonesia'
       })
       const fakeIdGenerator = () => 'user-1' // stub!
-      const fakeCurrentDateGenerator = () => '2023-06-04T13:29:54.057Z' // stub!
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, fakeIdGenerator, fakeCurrentDateGenerator)
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, fakeIdGenerator)
 
       // Action
       const registeredUser = await userRepositoryPostgres.addUser(registerUser)
