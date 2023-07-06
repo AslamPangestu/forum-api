@@ -15,6 +15,7 @@ RUN yarn global add pm2
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
+COPY /etc/secrets/.env ./
 RUN yarn install && yarn migrate
 COPY . .
 
