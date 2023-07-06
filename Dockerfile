@@ -1,7 +1,16 @@
 # syntax = docker/dockerfile:1.2
 FROM nginx:1.21.6-alpine
 
+# Setup ARGS
+ARG PORT 
 ARG PGHOST
+ARG PGPORT
+ARG PGDATABASE
+ARG PGUSER
+ARG PGPASSWORD
+ARG ACCESS_TOKEN_KEY
+ARG REFRESH_TOKEN_KEY
+ARG ACCCESS_TOKEN_AGE
 
 # Setup NGINX Config
 COPY /docker/nginx/default.conf /etc/nginx/conf.d/
@@ -9,19 +18,6 @@ COPY /docker/nginx/default.conf /etc/nginx/conf.d/
 # Install NodeJS
 RUN apk update && apk upgrade && apk add nodejs npm yarn
 RUN yarn global add pm2
-
-# Setup ENV
-# RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env
-RUN echo "ARGNAME=${PGHOST}"
-# ENV PORT=$PORT 
-# ENV PGHOST=$PGHOST
-# ENV PGPORT=$PGPORT
-# ENV PGDATABASE=$PGDATABASE
-# ENV PGUSER=$PGUSER
-# ENV PGPASSWORD=$PGPASSWORD
-# ENV ACCESS_TOKEN_KEY=$ACCESS_TOKEN_KEY
-# ENV REFRESH_TOKEN_KEY=$REFRESH_TOKEN_KEY
-# ENV ACCCESS_TOKEN_AGE=$ACCCESS_TOKEN_AGE
 
 # Setup Project
 WORKDIR /usr/src/app
