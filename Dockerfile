@@ -10,7 +10,7 @@ RUN yarn global add pm2
 
 # Setup ENV
 # RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env
-RUN echo $PGHOST
+RUN echo "ARGNAME=${PGHOST}"
 # ENV PORT=$PORT 
 # ENV PGHOST=$PGHOST
 # ENV PGPORT=$PGPORT
@@ -23,7 +23,7 @@ RUN echo $PGHOST
 
 # Setup Project
 WORKDIR /usr/src/app
-COPY /etc/secrets/.env ./
+# COPY /etc/secrets/.env ./
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install && yarn migrate
