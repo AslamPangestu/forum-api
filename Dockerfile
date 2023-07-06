@@ -13,4 +13,5 @@ COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install
 COPY . .
-CMD ["pm2-runtime", "src/app.js"]
+
+CMD ["pm2-runtime", "process.yml"]
