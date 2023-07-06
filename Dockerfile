@@ -3,6 +3,7 @@ FROM nginx:1.21.6-alpine
 
 # Setup ENV
 RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env
+RUN DOCKER_BUILDKIT=1
 
 # Setup NGINX Config
 COPY /docker/nginx/default.conf /etc/nginx/conf.d/
@@ -15,7 +16,6 @@ RUN yarn global add pm2
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
-COPY /etc/secrets/.env ./
 RUN yarn install && yarn migrate
 COPY . .
 
