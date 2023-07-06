@@ -9,7 +9,8 @@ RUN apk update && apk upgrade && apk add nodejs npm yarn
 RUN yarn global add pm2
 
 # Setup ENV
-RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env
+# RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env
+RUN echo $PGHOST
 # ENV PORT=$PORT 
 # ENV PGHOST=$PGHOST
 # ENV PGPORT=$PGPORT
