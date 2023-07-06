@@ -11,8 +11,7 @@ RUN yarn global add pm2
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
-RUN yarn install
+RUN yarn install && yarn migrate
 COPY . .
-RUN yarn migrate
 
 CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
