@@ -14,4 +14,4 @@ COPY yarn.lock ./
 RUN yarn install
 COPY . .
 
-CMD ["pm2-runtime", "process.yml"]
+CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
