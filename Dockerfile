@@ -9,7 +9,7 @@ RUN apk update && apk upgrade && apk add nodejs npm yarn
 RUN yarn global add pm2
 
 # Setup ENV
-RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env cp /etc/secrets/.env ./
+RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env
 # ENV PORT=$PORT 
 # ENV PGHOST=$PGHOST
 # ENV PGPORT=$PGPORT
@@ -22,6 +22,7 @@ RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env cp /etc/secrets/.env ./
 
 # Setup Project
 WORKDIR /usr/src/app
+COPY /etc/secrets/.env ./
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install && yarn migrate
