@@ -32,5 +32,5 @@ RUN pm2 start ecosystem.config.js
 
 EXPOSE 80
 
-CMD ["bash"]
+CMD ["/bin/sh"]
 # CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
