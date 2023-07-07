@@ -28,5 +28,6 @@ COPY yarn.lock ./
 RUN yarn install
 COPY . .
 RUN yarn migrate
+RUN pm2 start ecosystem.config.js
 
 # CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
