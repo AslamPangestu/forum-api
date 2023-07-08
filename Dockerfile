@@ -1,4 +1,3 @@
-# syntax = docker/dockerfile:1.2
 FROM nginx:1.21.6-alpine
 
 # Setup ARGS
@@ -22,7 +21,6 @@ RUN yarn global add pm2
 
 # Setup Project
 WORKDIR /usr/src/app
-# COPY /etc/secrets/.env ./
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install
@@ -30,7 +28,7 @@ COPY . .
 RUN yarn migrate
 RUN pm2 start ecosystem.config.js
 
-EXPOSE 80
+EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]
 # CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
