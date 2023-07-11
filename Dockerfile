@@ -28,7 +28,7 @@ COPY . .
 RUN yarn migrate
 RUN pm2 start ecosystem.config.js
 
-EXPOSE 443
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
 # CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
