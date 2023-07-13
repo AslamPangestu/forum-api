@@ -8,7 +8,6 @@ RUN yarn global add pm2
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
-COPY .env ./
 RUN yarn install
 COPY . .
 RUN yarn migrate
