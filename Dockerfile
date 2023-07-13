@@ -11,7 +11,6 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY .env ./
 RUN yarn install
-RUN echo $PGSSLMODE
 COPY . .
 RUN yarn migrate
 RUN pm2 start ecosystem.config.js
