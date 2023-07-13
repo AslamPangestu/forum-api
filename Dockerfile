@@ -1,5 +1,6 @@
 FROM node:16.20.1-alpine3.18
 
+ENV PGSSLMODE=true
 # Install NodeJS
 RUN apk update && apk upgrade && apk add yarn
 RUN yarn global add pm2
