@@ -9,8 +9,6 @@ const testConfig = {
   database: process.env.PGDATABASE_TEST
 }
 
-const pool = process.env.NODE_ENV === 'test'
-  ? new Pool(testConfig)
-  : new Pool({ connectionString: `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}?sslmode=require` })
+const pool = process.env.NODE_ENV === 'test' ? new Pool(testConfig) : new Pool()
 
 module.exports = pool

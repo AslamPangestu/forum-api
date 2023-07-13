@@ -1,6 +1,5 @@
 FROM node:16.20.1-alpine3.18
 
-ENV PGSSLMODE=true
 # Install NodeJS
 RUN apk update && apk upgrade && apk add yarn
 RUN yarn global add pm2
@@ -10,6 +9,8 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 COPY .env ./
+RUN echo $PGHOST
+RUN echo $PGSSLMODE
 RUN yarn install
 COPY . .
 RUN yarn migrate
