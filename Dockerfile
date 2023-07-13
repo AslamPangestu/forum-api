@@ -1,22 +1,7 @@
-FROM nginx:1.21.6-alpine
-
-# Setup ARGS
-ARG PORT 
-ARG PGHOST
-ARG PGPORT
-ARG PGDATABASE
-ARG PGUSER
-ARG PGPASSWORD
-ARG PGSSLMODE
-ARG ACCESS_TOKEN_KEY
-ARG REFRESH_TOKEN_KEY
-ARG ACCCESS_TOKEN_AGE
-
-# Setup NGINX Config
-COPY /docker/nginx/default.conf /etc/nginx/conf.d/
+FROM node:16.20.1-alpine3.18
 
 # Install NodeJS
-RUN apk update && apk upgrade && apk add nodejs npm yarn
+RUN apk update && apk upgrade && apk add yarn
 RUN yarn global add pm2
 
 # Setup Project
@@ -28,7 +13,4 @@ COPY . .
 RUN yarn migrate
 RUN pm2 start ecosystem.config.js
 
-EXPOSE 443
-
-CMD ["nginx", "-g", "daemon off;"]
-# CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
+CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
