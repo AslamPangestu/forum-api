@@ -3,4 +3,3 @@
 .idea
 **/config/database/test.json
 **/coverage
-.env
