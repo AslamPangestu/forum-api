@@ -9,8 +9,6 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 COPY .env ./
-RUN echo $PGHOST
-RUN echo $PGSSLMODE
 RUN yarn install
 COPY . .
 RUN yarn migrate
