@@ -12,6 +12,7 @@ COPY .env ./
 RUN yarn install
 COPY . .
 RUN yarn migrate
-RUN pm2 start ecosystem.config.js
+
+EXPOSE 8000
 
 CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
