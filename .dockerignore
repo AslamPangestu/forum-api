@@ -3,3 +3,5 @@
 .idea
 **/config/database/test.json
 **/coverage
+.gitignore
+.env
