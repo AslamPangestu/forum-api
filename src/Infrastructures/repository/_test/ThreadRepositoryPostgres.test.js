@@ -158,4 +158,38 @@ describe('ThreadRepositoryPostgres', () => {
       })
     })
   })
+
+  describe('checkThreadExist function', () => {
+    it('should throw NotFoundError when thread not found', () => {
+      // Arrange
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {})
+
+      // Action & Assert
+      return expect(threadRepositoryPostgres.checkThreadExist('thread-1'))
+        .rejects
+        .toThrowError(NotFoundError)
+    })
+
+    describe('thread found', () => {
+      let threadRepositoryPostgres
+
+      beforeEach(async () => {
+        await UsersTableTestHelper.addUser({ id: 'user-1', username: 'dicoding' })
+        await ThreadsTableTestHelper.addThread({
+          id: 'thread-1',
+          title: 'Tittle Thread',
+          body: 'Body Thread',
+          userId: 'user-1'
+        })
+
+        threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {})
+      })
+
+      it('should not throw NotFoundError when thread found', async () => {
+        // Action & Assert
+        return expect(threadRepositoryPostgres.checkThreadExist('thread-1')).resolves.not
+          .toThrow(NotFoundError)
+      })
+    })
+  })
 })

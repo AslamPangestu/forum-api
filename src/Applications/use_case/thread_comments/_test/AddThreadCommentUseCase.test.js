@@ -1,4 +1,5 @@
 const IUserRepository = require('../../../../Domains/users/IUserRepository')
+const IThreadRepository = require('../../../../Domains/threads/IThreadRepository')
 const IThreadCommentRepository = require('../../../../Domains/threadComments/IThreadCommentRepository')
 const AddThreadComment = require('../../../../Domains/threadComments/entities/AddThreadComment')
 const AddedThreadComment = require('../../../../Domains/threadComments/entities/AddedThreadComment')
@@ -23,12 +24,15 @@ describe('AddThreadCommentUseCase', () => {
     /** creating dependency of use case */
     const mockThreadCommentRepository = new IThreadCommentRepository()
     const mockUserRepository = new IUserRepository()
+    const mockThreadRepository = new IThreadRepository()
 
     /** mocking needed function */
     mockThreadCommentRepository.addThreadComment = jest.fn(() => Promise.resolve({
       id: 'thread_comment-1',
       content: useCasePayload.content
     }))
+
+    mockThreadRepository.checkThreadExist = jest.fn(() => Promise.resolve())
 
     mockUserRepository.getUserById = jest.fn(() => Promise.resolve({
       id: user.id,
@@ -52,6 +56,12 @@ describe('AddThreadCommentUseCase', () => {
     }))
 
     expect(mockUserRepository.getUserById).toBeCalledWith(user.id)
+
+    expect(mockThreadRepository.checkThreadExist).toBeCalledWith(new AddedThreadComment({
+      id: 'thread_comment-1',
+      content: useCasePayload.content,
+      owner: user.username
+    }))
 
     expect(mockThreadCommentRepository.addThreadComment).toBeCalledWith(new AddThreadComment({
       threadId: useCasePayload.threadId,

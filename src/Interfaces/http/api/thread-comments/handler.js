@@ -1,5 +1,6 @@
 const AddThreadCommentUseCase = require('../../../../Applications/use_case/thread_comments/AddThreadCommentUseCase')
 const DeleteThreadCommentUseCase = require('../../../../Applications/use_case/thread_comments/DeleteThreadCommentUseCase')
+const LikeDislikeThreadCommentUseCase = require('../../../../Applications/use_case/thread_comments/LikeDislikeThreadCommentUseCase')
 
 class ThreadsHandler {
   constructor (container) {
@@ -50,6 +51,18 @@ class ThreadsHandler {
     const { id: credentialId } = request.auth.credentials
     const deleteThreadCommentUseCase = this._container.getInstance(DeleteThreadCommentUseCase.name)
     await deleteThreadCommentUseCase.execute(request.params, credentialId)
+
+    const response = h.response({
+      status: 'success'
+    })
+    response.code(200)
+    return response
+  }
+
+  async likeDislikeThreadCommentHandler (request, h) {
+    const { id: credentialId } = request.auth.credentials
+    const likeDislikeThreadCommentUseCase = this._container.getInstance(LikeDislikeThreadCommentUseCase.name)
+    await likeDislikeThreadCommentUseCase.execute(request.params, credentialId)
 
     const response = h.response({
       status: 'success'
