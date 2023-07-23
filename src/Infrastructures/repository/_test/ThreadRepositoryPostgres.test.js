@@ -1,5 +1,6 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper')
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper')
+const ThreadCommentLikesTableTestHelper = require('../../../../tests/ThreadCommentLikesTableTestHelper')
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
 
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError')
@@ -93,7 +94,8 @@ describe('ThreadRepositoryPostgres', () => {
             comment_id: null,
             comment_content: null,
             comment_username: null,
-            comment_at: null
+            comment_at: null,
+            like_count: 0
           }
         ]))
       })
@@ -113,6 +115,7 @@ describe('ThreadRepositoryPostgres', () => {
           threadId: 'thread-1',
           commentId: 'thread_comment-1'
         })
+        await ThreadCommentLikesTableTestHelper.addThreadCommentLike({ id: 'thread_comment_like-1', commentId: 'thread_comment_1', userId: 'user_1' })
 
         // Action & Assert
         const thread = await threadRepositoryPostgres.findThreadById('thread-1')
@@ -128,7 +131,8 @@ describe('ThreadRepositoryPostgres', () => {
             comment_at: null,
             comment_username: null,
             comment_delete_at: null,
-            reply_id: null
+            reply_id: null,
+            like_count: 0
           },
           {
             id: 'thread-1',
@@ -140,7 +144,8 @@ describe('ThreadRepositoryPostgres', () => {
             comment_content: 'comment 1',
             comment_username: 'dicoding',
             comment_at: thread.comments[0].date,
-            reply_id: null
+            reply_id: null,
+            like_count: 1
           },
           {
             id: 'thread-1',
@@ -152,7 +157,8 @@ describe('ThreadRepositoryPostgres', () => {
             comment_content: 'comment 1',
             comment_username: 'dicoding',
             comment_at: thread.comments[0].replies[0].date,
-            reply_id: 'thread_comment-1'
+            reply_id: 'thread_comment-1',
+            like_count: 0
           }
         ]))
       })

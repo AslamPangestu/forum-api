@@ -3,7 +3,6 @@ const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
 
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError')
-const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError')
 
 const AddThreadComment = require('../../../Domains/threadComments/entities/AddThreadComment')
 const DeleteThreadComment = require('../../../Domains/threadComments/entities/DeleteThreadComment')
@@ -32,60 +31,38 @@ describe('ThreadCommentRepositoryPostgres', () => {
     })
 
     describe('and no reply', () => {
+      let addThreadComment
       beforeEach(async () => {
         // Arrange
         const fakeIdGenerator = () => 'thread_comment-1' // stub!
         threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator)
-      })
-
-      describe('and thread does not exist', () => {
-        it('should throw NotFoundError when thread not found', async () => {
-          // Arrange
-          const addThreadComment = new AddThreadComment({
-            content: 'comment 1',
-            threadId: 'thread-3'
-          })
-
-          // Action & Assert
-          return expect(threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1'))
-            .rejects
-            .toThrowError('tidak dapat membuat komentar thread baru karena thread tidak ditemukan')
+        await ThreadsTableTestHelper.addThread({
+          id: 'thread-1',
+          title: 'Tittle Thread',
+          body: 'Body Thread',
+          userId: 'user-1'
+        })
+        addThreadComment = new AddThreadComment({
+          content: 'comment 1',
+          threadId: 'thread-1'
         })
       })
 
-      describe('and thread exist', () => {
-        let addThreadComment
+      it('should persist threadComment and return threadComment correctly', async () => {
+        // Action
+        await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
 
-        beforeEach(async () => {
-          // Arrange
-          await ThreadsTableTestHelper.addThread({
-            id: 'thread-1',
-            title: 'Tittle Thread',
-            body: 'Body Thread',
-            userId: 'user-1'
-          })
-          addThreadComment = new AddThreadComment({
-            content: 'comment 1',
-            threadId: 'thread-1'
-          })
-        })
+        // Assert
+        const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-1', 'thread-1', 'user-1')
+        expect(threadComments.length).toBeGreaterThan(0)
+      })
 
-        it('should persist threadComment and return threadComment correctly', async () => {
-          // Action
-          await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
+      it('should return threadComment correctly', async () => {
+        // Action
+        const threadComment = await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
 
-          // Assert
-          const threadComments = await ThreadCommentsTableTestHelper.findThreadComment('thread_comment-1', 'thread-1', 'user-1')
-          expect(threadComments.length).toBeGreaterThan(0)
-        })
-
-        it('should return threadComment correctly', async () => {
-          // Action
-          const threadComment = await threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1')
-
-          // Assert
-          expect(threadComment).toStrictEqual({ id: 'thread_comment-1', content: 'comment 1' })
-        })
+        // Assert
+        expect(threadComment).toStrictEqual({ id: 'thread_comment-1', content: 'comment 1' })
       })
     })
 
@@ -192,23 +169,12 @@ describe('ThreadCommentRepositoryPostgres', () => {
           })
         })
 
-        it('should throw AuthorizationError when threadComment is different owner', async () => {
-          // Arrange
-          await UsersTableTestHelper.addUser({ id: 'user-2', username: 'dicoding 2', fullname: 'Dicoding 2' })
-
+        it('should not throw when threadComment is found', async () => {
           // Action & Assert
           return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow(
-            new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1' }), 'user-2'))
-            .rejects
-            .toThrowError(AuthorizationError)
-        })
-
-        it('should not throw when threadComment is same owner', async () => {
-          // Action & Assert
-          return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow(
-            new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1' }), 'user-1'))
+            { commentId: 'thread_comment-1', threadId: 'thread-1' }, 'user-1'))
             .resolves.not
-            .toThrow(AuthorizationError)
+            .toThrow(NotFoundError)
         })
       })
     })
@@ -247,23 +213,12 @@ describe('ThreadCommentRepositoryPostgres', () => {
           })
         })
 
-        it('should throw AuthorizationError when threadComment is different owner', async () => {
-          // Arrange
-          await UsersTableTestHelper.addUser({ id: 'user-2', username: 'dicoding 2', fullname: 'Dicoding 2' })
-
+        it('should not throw when threadComment is found', async () => {
           // Action & Assert
           return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow(
-            new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1', replyId: 'thread_comment-2' }), 'user-2'))
-            .rejects
-            .toThrowError(AuthorizationError)
-        })
-
-        it('should not throw when threadComment is same owner', async () => {
-          // Action & Assert
-          return expect(threadCommentRepositoryPostgres.checkThreadCommentAllow(
-            new DeleteThreadComment({ commentId: 'thread_comment-1', threadId: 'thread-1', replyId: 'thread_comment-2' }), 'user-1'))
+            { commentId: 'thread_comment-1', threadId: 'thread-1', replyId: 'thread_comment-2' }, 'user-1'))
             .resolves.not
-            .toThrow(AuthorizationError)
+            .toThrow(NotFoundError)
         })
       })
     })

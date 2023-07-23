@@ -9,6 +9,7 @@ class ThreadsHandler {
     this.postThreadCommentHandler = this.postThreadCommentHandler.bind(this)
     this.postThreadCommentReplyHandler = this.postThreadCommentReplyHandler.bind(this)
     this.deleteThreadCommentHandler = this.deleteThreadCommentHandler.bind(this)
+    this.likeDislikeThreadCommentHandler = this.likeDislikeThreadCommentHandler.bind(this)
   }
 
   async postThreadCommentHandler (request, h) {

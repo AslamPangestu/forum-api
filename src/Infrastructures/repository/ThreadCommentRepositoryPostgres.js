@@ -1,18 +1,16 @@
 const NotFoundError = require('../../Commons/exceptions/NotFoundError')
-const AuthorizationError = require('../../Commons/exceptions/AuthorizationError')
 
 const IThreadCommentRepository = require('../../Domains/threadComments/IThreadCommentRepository')
 
 const TABLE_NAME = 'thread_comments'
 
 class ThreadRepositoryPostgres extends IThreadCommentRepository {
-  constructor (pool, idGenerator, currentDateGenerator) {
+  constructor (pool, idGenerator) {
     super()
     this._pool = pool
     this._idGenerator = idGenerator
   }
 
-  // TODO: Handle error
   async addThreadComment (addThreadComment, userId) {
     const { content, threadId } = addThreadComment
     const generatedId = this._idGenerator('thread_comments')
@@ -22,16 +20,12 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
       values: [generatedId, content, userId, threadId, addThreadComment?.commentId || null]
     }
 
-    try {
-      const result = await this._pool.query(query)
+    const result = await this._pool.query(query)
 
-      return result.rows[0]
-    } catch (error) {
-      throw new NotFoundError('tidak dapat membuat komentar thread baru karena thread tidak ditemukan')
-    }
+    return result.rows[0]
   }
 
-  async checkThreadCommentAllow (checkThreadCommentAllow, userId) {
+  async checkThreadCommentAllow (checkThreadCommentAllow) {
     const { commentId, threadId } = checkThreadCommentAllow
     let baseQuery = `SELECT * FROM ${TABLE_NAME} WHERE id = $1 AND thread_id = $2 AND soft_delete_at IS NULL`
     const baseParam = [commentId, threadId]
@@ -48,15 +42,13 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
 
     const result = await this._pool.query(query)
 
+    console.log(result.rows)
+
     if (!result.rowCount) {
       throw new NotFoundError('tidak dapat mengakses komentar thread karena thread atau komentar thread tidak ditemukan')
     }
 
-    const data = result.rows[0]
-
-    if (data.user_id !== userId) {
-      throw new AuthorizationError('tidak dapat menghapus komentar thread karena user tidak sesuai')
-    }
+    return result.rows[0]
   }
 
   async deleteThreadComment (deleteThreadComment, userId) {

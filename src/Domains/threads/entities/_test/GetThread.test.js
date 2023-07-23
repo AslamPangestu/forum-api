@@ -52,7 +52,8 @@ describe('GetThread entities', () => {
         comment_id: null,
         comment_content: null,
         comment_at: null,
-        comment_username: null
+        comment_username: null,
+        like_count: 0
       }
     ]
 
@@ -96,6 +97,7 @@ describe('GetThread entities', () => {
         comment_content: 'comment 1',
         comment_at: '2023-06-04T13:29:54.057Z',
         comment_username: 'dicoding',
+        like_count: 1,
         comment_delete_at: null,
         reply_id: null
       },
@@ -110,6 +112,7 @@ describe('GetThread entities', () => {
         comment_at: '2023-06-04T13:29:54.057Z',
         comment_username: 'dicoding',
         comment_delete_at: null,
+        like_count: 1,
         reply_id: 'thread_comment-1'
       },
       {
@@ -123,6 +126,7 @@ describe('GetThread entities', () => {
         comment_at: '2023-06-04T13:29:54.057Z',
         comment_username: 'dicoding',
         comment_delete_at: '2023-06-04T13:29:54.057Z',
+        like_count: 1,
         reply_id: 'thread_comment-1'
       },
       {
@@ -136,6 +140,7 @@ describe('GetThread entities', () => {
         comment_at: '2023-06-04T13:29:54.057Z',
         comment_username: 'dicoding',
         comment_delete_at: '2023-06-04T13:29:54.057Z',
+        like_count: 1,
         reply_id: null
       }
     ]

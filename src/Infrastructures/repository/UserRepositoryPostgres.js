@@ -3,7 +3,7 @@ const RegisteredUser = require('../../Domains/users/entities/RegisteredUser')
 const IUserRepository = require('../../Domains/users/IUserRepository')
 
 class UserRepositoryPostgres extends IUserRepository {
-  constructor (pool, idGenerator, currentDateGenerator) {
+  constructor (pool, idGenerator) {
     super()
     this._pool = pool
     this._idGenerator = idGenerator

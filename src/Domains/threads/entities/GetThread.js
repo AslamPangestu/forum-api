@@ -46,11 +46,13 @@ class GetThread {
       username: item.comment_username,
       date: this._convertDateToString(item.comment_at),
       content: generateComment(item.comment_delete_at, item.comment_content, '**komentar telah dihapus**'),
+      likeCount: item.like_count,
       replies: payloads.filter(({ reply_id }) => reply_id && reply_id === item.comment_id).map(subitem => ({
         id: subitem.comment_id,
         username: subitem.comment_username,
         date: this._convertDateToString(subitem.comment_at),
-        content: generateComment(subitem.comment_delete_at, subitem.comment_content, '**balasan telah dihapus**')
+        content: generateComment(subitem.comment_delete_at, subitem.comment_content, '**balasan telah dihapus**'),
+        likeCount: subitem.like_count
       }))
     }))
   }

@@ -47,7 +47,8 @@ describe('GetThreadUseCase', () => {
         comment_id: null,
         comment_content: null,
         comment_username: null,
-        comment_at: null
+        comment_at: null,
+        like_count: 0
       }
     ]))
 

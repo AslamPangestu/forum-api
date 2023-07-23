@@ -2,6 +2,7 @@ const AuthenticationsTableTestHelper = require('../../../../tests/Authentication
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper')
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper')
+const ThreadCommentLikesTableTestHelper = require('../../../../tests/ThreadCommentLikesTableTestHelper')
 
 const pool = require('../../database/postgres/pool')
 const container = require('../../container')
@@ -39,6 +40,7 @@ describe('/thread/{threadId}/comments endpoint', () => {
   })
 
   afterEach(async () => {
+    await ThreadCommentLikesTableTestHelper.cleanTable()
     await ThreadCommentsTableTestHelper.cleanTable()
     await ThreadsTableTestHelper.cleanTable()
     await AuthenticationsTableTestHelper.cleanTable()
@@ -452,6 +454,66 @@ describe('/thread/{threadId}/comments endpoint', () => {
       const response = await server.inject({
         method: 'DELETE',
         url: '/threads/1/comments/1/replies/2',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+
+      // Assert
+      const responseJson = JSON.parse(response.payload)
+      expect(response.statusCode).toEqual(404)
+      expect(responseJson.status).toEqual('fail')
+      expect(responseJson.message).toEqual('tidak dapat mengakses komentar thread karena thread atau komentar thread tidak ditemukan')
+    })
+  })
+
+  describe('when PUT /threads/{threadId}/comments/{commentId}/likes', () => {
+    describe('and thread exist', () => {
+      let threadId, commentId
+
+      beforeEach(async () => {
+        const requestThreadPayload = {
+          title: 'Tittle Thread',
+          body: 'Body Thread'
+        }
+        const responseThread = await server.inject({
+          method: 'POST',
+          url: '/threads',
+          headers: { Authorization: `Bearer ${token}` },
+          payload: requestThreadPayload
+        })
+        threadId = JSON.parse(responseThread.payload).data.addedThread.id
+
+        const requestCommentPayload = {
+          content: 'comment 1'
+        }
+        const responseComment = await server.inject({
+          method: 'POST',
+          url: `/threads/${threadId}/comments`,
+          payload: requestCommentPayload,
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        commentId = JSON.parse(responseComment.payload).data.addedComment.id
+      })
+
+      it('should response 200', async () => {
+        // Action
+        const response = await server.inject({
+          method: 'PUT',
+          url: `/threads/${threadId}/comments/${commentId}/likes`,
+          headers: { Authorization: `Bearer ${token}` }
+        })
+
+        // Assert
+        const responseJson = JSON.parse(response.payload)
+        expect(response.statusCode).toEqual(200)
+        expect(responseJson.status).toEqual('success')
+      })
+    })
+
+    it('should response 404 when thread or comment not found', async () => {
+      // Action
+      const response = await server.inject({
+        method: 'PUT',
+        url: '/threads/1/comments/1/likes',
         headers: { Authorization: `Bearer ${token}` }
       })
 

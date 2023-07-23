@@ -42,6 +42,7 @@ describe('AddThreadCommentUseCase', () => {
     /** creating use case instance */
     const addThreadCommentUseCase = new AddThreadCommentUseCase({
       threadCommentRepository: mockThreadCommentRepository,
+      threadRepository: mockThreadRepository,
       userRepository: mockUserRepository
     })
 
@@ -57,11 +58,7 @@ describe('AddThreadCommentUseCase', () => {
 
     expect(mockUserRepository.getUserById).toBeCalledWith(user.id)
 
-    expect(mockThreadRepository.checkThreadExist).toBeCalledWith(new AddedThreadComment({
-      id: 'thread_comment-1',
-      content: useCasePayload.content,
-      owner: user.username
-    }))
+    expect(mockThreadRepository.checkThreadExist).toBeCalledWith('thread-1')
 
     expect(mockThreadCommentRepository.addThreadComment).toBeCalledWith(new AddThreadComment({
       threadId: useCasePayload.threadId,
@@ -84,6 +81,7 @@ describe('AddThreadCommentUseCase', () => {
     /** creating dependency of use case */
     const mockThreadCommentRepository = new IThreadCommentRepository()
     const mockUserRepository = new IUserRepository()
+    const mockThreadRepository = new IThreadRepository()
 
     /** mocking needed function */
     mockThreadCommentRepository.addThreadComment = jest.fn()
@@ -101,6 +99,7 @@ describe('AddThreadCommentUseCase', () => {
     /** creating use case instance */
     const addThreadCommentUseCase = new AddThreadCommentUseCase({
       threadCommentRepository: mockThreadCommentRepository,
+      threadRepository: mockThreadRepository,
       userRepository: mockUserRepository
     })
 

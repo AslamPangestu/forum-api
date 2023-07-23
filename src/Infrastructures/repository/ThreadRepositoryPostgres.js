@@ -6,7 +6,7 @@ const GetThread = require('../../Domains/threads/entities/GetThread')
 const TABLE_NAME = 'threads'
 
 class ThreadRepositoryPostgres extends IThreadRepository {
-  constructor (pool, idGenerator, currentDateGenerator) {
+  constructor (pool, idGenerator) {
     super()
     this._pool = pool
     this._idGenerator = idGenerator
@@ -32,7 +32,8 @@ class ThreadRepositoryPostgres extends IThreadRepository {
         users.username, 
         thread_comments.id AS comment_id, thread_comments.created_at AS comment_at, thread_comments.comment_id AS reply_id, 
         thread_comments.soft_delete_at AS comment_delete_at, thread_comments.content AS comment_content, 
-        (SELECT users.username FROM users WHERE users.id = thread_comments.user_id) comment_username
+        (SELECT users.username FROM users WHERE users.id = thread_comments.user_id) comment_username,
+        (SELECT SUM(like_count) AS like_count FROM thread_comment_likes WHERE thread_comment_likes.comment_id = thread_comments.comment_id) like_count
         FROM ${TABLE_NAME} 
         LEFT JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id
         INNER JOIN users ON ${TABLE_NAME}.user_id = users.id

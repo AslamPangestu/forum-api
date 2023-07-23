@@ -16,11 +16,13 @@ const IAuthenticationRepository = require('../Domains/authentications/IAuthentic
 const IUserRepository = require('../Domains/users/IUserRepository')
 const IThreadRepository = require('../Domains/threads/IThreadRepository')
 const IThreadCommentRepository = require('../Domains/threadComments/IThreadCommentRepository')
+const IThreadCommentLikeRepository = require('../Domains/threadComments/IThreadCommentLikeRepository')
 
 const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres')
 const UserRepositoryPostgres = require('./repository/UserRepositoryPostgres')
 const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres')
 const ThreadCommentRepositoryPostgres = require('./repository/ThreadCommentRepositoryPostgres')
+const ThreadCommentLikeRepositoryPostgres = require('./repository/ThreadCommentLikeRepositoryPostgres')
 
 const BcryptPasswordHash = require('./security/BcryptPasswordHash')
 const JwtTokenManager = require('./security/JwtTokenManager')
@@ -36,6 +38,7 @@ const GetThreadUseCase = require('../Applications/use_case/threads/GetThreadUseC
 
 const AddThreadCommentUseCase = require('../Applications/use_case/thread_comments/AddThreadCommentUseCase')
 const DeleteThreadCommentUseCase = require('../Applications/use_case/thread_comments/DeleteThreadCommentUseCase')
+const LikeDislikeThreadCommentUseCase = require('../Applications/use_case/thread_comments/LikeDislikeThreadCommentUseCase')
 
 // creating container
 const container = createContainer()
@@ -74,6 +77,20 @@ container.register([
   {
     key: IThreadCommentRepository.name,
     Class: ThreadCommentRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool
+        },
+        {
+          concrete: generateId
+        }
+      ]
+    }
+  },
+  {
+    key: IThreadCommentLikeRepository.name,
+    Class: ThreadCommentLikeRepositoryPostgres,
     parameter: {
       dependencies: [
         {
@@ -238,6 +255,10 @@ container.register([
       injectType: 'destructuring',
       dependencies: [
         {
+          name: 'threadRepository',
+          internal: IThreadRepository.name
+        },
+        {
           name: 'threadCommentRepository',
           internal: IThreadCommentRepository.name
         },
@@ -254,6 +275,27 @@ container.register([
     parameter: {
       injectType: 'destructuring',
       dependencies: [
+        {
+          name: 'threadCommentRepository',
+          internal: IThreadCommentRepository.name
+        },
+        {
+          name: 'userRepository',
+          internal: IUserRepository.name
+        }
+      ]
+    }
+  },
+  {
+    key: LikeDislikeThreadCommentUseCase.name,
+    Class: LikeDislikeThreadCommentUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadCommentLikeRepository',
+          internal: IThreadCommentLikeRepository.name
+        },
         {
           name: 'threadCommentRepository',
           internal: IThreadCommentRepository.name
