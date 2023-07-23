@@ -13,5 +13,5 @@ RUN yarn install
 COPY . .
 # RUN yarn migrate
 
-# CMD [ "pm2-runtime", "start", "ecosystem.config.js"]
-CMD ["yarn", "start"]
+CMD [ "pm2-runtime", "start", "ecosystem.config.js"]
+# CMD ["yarn", "start"]
