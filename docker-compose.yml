@@ -17,11 +17,6 @@ services:
       - ./:/app
     networks:
       - main
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
   server:
     image: nginx:stable-alpine3.17-slim
     ports:
@@ -29,10 +24,18 @@ services:
       - 443:443
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - ./docker/certbot/conf:/etc/nginx/ssl
+      - ./docker/certbot/data:/var/www/certbot
     networks:
       - main
     depends_on:
       - app
-      - certbot
+  certbot:
+    image: certbot/certbot:latest
+    command: certonly --webroot --webroot-path=/var/www/certbot --email aslampangesty@gmail.com --agree-tos --no-eff-email -d three-papers-smell-brightly.a276.dcdg.xyz
+    volumes:
+      - ./docker/certbot/conf:/etc/letsencrypt
+      - ./docker/certbot/logs:/var/log/letsencrypt
+      - ./docker/certbot/data:/var/www/certbot
+    depends_on:
+      - server
