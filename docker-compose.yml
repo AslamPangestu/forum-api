@@ -19,6 +19,7 @@ services:
       - main
   server:
     image: nginx:stable-alpine3.17-slim
+    restart: unless-stopped
     ports:
       - 80:80
       - 443:443
@@ -32,10 +33,9 @@ services:
       - app
   certbot:
     image: certbot/certbot:latest
-    command: certonly --webroot --webroot-path=/var/www/certbot --email aslampangesty@gmail.com --agree-tos --no-eff-email -d three-papers-smell-brightly.a276.dcdg.xyz
-    volumes:
+    volumes: 
       - ./docker/certbot/conf:/etc/letsencrypt
-      - ./docker/certbot/logs:/var/log/letsencrypt
-      - ./docker/certbot/data:/var/www/certbot
+      - ./docker/certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email aslampangestu@gmail.com -d three-papers-smell-brightly.a276.dcdg.xyz --agree-tos
     depends_on:
       - server
