@@ -23,5 +23,5 @@ jobs:
           git pull origin master
           docker-compose rm -f
           docker-compose pull
-          docker-compose up --detach --no-deps --build app
-          docker-compose up --detach --no-deps --build server
+          docker-compose build --no-cache app
+          docker-compose build --no-cache server
