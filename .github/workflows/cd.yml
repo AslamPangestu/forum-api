@@ -25,5 +25,7 @@ jobs:
           docker-compose pull
           docker-compose build --no-cache app
           docker-compose build --no-cache server
+          docker-compose build --no-cache certbot
           docker-compose up -d app
           docker-compose up -d server
+          docker-compose up -d certbot
