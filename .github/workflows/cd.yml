@@ -25,3 +25,5 @@ jobs:
           docker-compose pull
           docker-compose build --no-cache app
           docker-compose build --no-cache server
+          docker-compose up app
+          docker-compose up server
