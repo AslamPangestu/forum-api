@@ -145,7 +145,7 @@ describe('/thread/{threadId}/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload)
       expect(response.statusCode).toEqual(404)
       expect(responseJson.status).toEqual('fail')
-      expect(responseJson.message).toEqual('tidak dapat membuat komentar thread baru karena thread tidak ditemukan')
+      expect(responseJson.message).toEqual('tidak dapat membuat komentar thread baru, thread tidak ditemukan')
     })
   })
 
@@ -244,7 +244,7 @@ describe('/thread/{threadId}/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload)
       expect(response.statusCode).toEqual(404)
       expect(responseJson.status).toEqual('fail')
-      expect(responseJson.message).toEqual('tidak dapat mengakses komentar thread karena thread atau komentar thread tidak ditemukan')
+      expect(responseJson.message).toEqual('tidak dapat mengakses komentar thread, thread atau komentar thread tidak ditemukan')
     })
   })
 
@@ -357,7 +357,7 @@ describe('/thread/{threadId}/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload)
       expect(response.statusCode).toEqual(404)
       expect(responseJson.status).toEqual('fail')
-      expect(responseJson.message).toEqual('tidak dapat membuat komentar thread baru karena thread tidak ditemukan')
+      expect(responseJson.message).toEqual('tidak dapat membuat komentar thread baru, thread tidak ditemukan')
     })
   })
 
@@ -461,7 +461,7 @@ describe('/thread/{threadId}/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload)
       expect(response.statusCode).toEqual(404)
       expect(responseJson.status).toEqual('fail')
-      expect(responseJson.message).toEqual('tidak dapat mengakses komentar thread karena thread atau komentar thread tidak ditemukan')
+      expect(responseJson.message).toEqual('tidak dapat mengakses komentar thread, thread atau komentar thread tidak ditemukan')
     })
   })
 
@@ -521,7 +521,7 @@ describe('/thread/{threadId}/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload)
       expect(response.statusCode).toEqual(404)
       expect(responseJson.status).toEqual('fail')
-      expect(responseJson.message).toEqual('tidak dapat mengakses komentar thread karena thread atau komentar thread tidak ditemukan')
+      expect(responseJson.message).toEqual('tidak dapat mengakses komentar thread, thread atau komentar thread tidak ditemukan')
     })
   })
 })

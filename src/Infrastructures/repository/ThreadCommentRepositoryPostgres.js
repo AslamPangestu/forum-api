@@ -42,10 +42,8 @@ class ThreadRepositoryPostgres extends IThreadCommentRepository {
 
     const result = await this._pool.query(query)
 
-    console.log(result.rows)
-
     if (!result.rowCount) {
-      throw new NotFoundError('tidak dapat mengakses komentar thread karena thread atau komentar thread tidak ditemukan')
+      throw new NotFoundError('tidak dapat mengakses komentar thread, thread atau komentar thread tidak ditemukan')
     }
 
     return result.rows[0]

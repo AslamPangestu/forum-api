@@ -11,7 +11,6 @@ class DeleteThreadCommentUseCase {
     const deleteThreadComment = new DeleteThreadComment(useCasePayload)
     await this._userRepository.getUserById(userId)
     const threadComment = await this._threadCommentRepository.checkThreadCommentAllow(useCasePayload)
-    console.log(threadComment, useCasePayload)
     if (threadComment.user_id !== userId) {
       throw new AuthorizationError('tidak dapat menghapus komentar thread karena user tidak sesuai')
     }

@@ -58,7 +58,7 @@ describe('AddThreadCommentUseCase', () => {
 
     expect(mockUserRepository.getUserById).toBeCalledWith(user.id)
 
-    expect(mockThreadRepository.checkThreadExist).toBeCalledWith('thread-1')
+    expect(mockThreadRepository.checkThreadExist).toBeCalledWith('thread-1', 'tidak dapat membuat komentar thread baru')
 
     expect(mockThreadCommentRepository.addThreadComment).toBeCalledWith(new AddThreadComment({
       threadId: useCasePayload.threadId,
@@ -89,6 +89,8 @@ describe('AddThreadCommentUseCase', () => {
         id: 'thread_comment-2',
         content: useCasePayload.content
       }))
+
+    mockThreadRepository.checkThreadExist = jest.fn(() => Promise.resolve())
 
     mockUserRepository.getUserById = jest.fn()
       .mockImplementation(() => Promise.resolve({

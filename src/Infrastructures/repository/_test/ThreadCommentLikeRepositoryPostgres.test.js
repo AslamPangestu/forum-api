@@ -88,7 +88,7 @@ describe('ThreadCommentLikeRepositoryPostgres', () => {
     })
 
     describe('and thread comment like does not exist', () => {
-      it('should return null when threadComment not found', () => {
+      it('should return null when threadCommentLike not found', () => {
         // Action & Assert
         return expect(threadCommentLikeRepositoryPostgres.findThreadCommentLike({ commentId: 'thread_comment-1', userId: 'user-1' })).toBeNull()
       })
@@ -149,9 +149,8 @@ describe('ThreadCommentLikeRepositoryPostgres', () => {
 
       // Assert
       const threadComments = await ThreadCommentLikesTableTestHelper.findThreadCommentLike('thread_comment_like-1', 'user-1', 'thread_comment-1')
-      console.log(threadComments)
       expect(threadComments).toHaveLength(1)
-      expect(threadComments.like_status).toBe(1)
+      expect(threadComments[0].like_status).toBe(1)
     })
   })
 })

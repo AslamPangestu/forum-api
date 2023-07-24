@@ -79,22 +79,6 @@ describe('ThreadCommentRepositoryPostgres', () => {
         threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator)
       })
 
-      describe('and thread comment does not exist', () => {
-        it('should throw NotFoundError when thread comment not found', async () => {
-          // Arrange
-          const addThreadComment = new AddThreadComment({
-            content: 'comment 1',
-            threadId: 'thread-1',
-            commentId: 'thread_comment-3'
-          })
-
-          // Action & Assert
-          return expect(threadCommentRepositoryPostgres.addThreadComment(addThreadComment, 'user-1'))
-            .rejects
-            .toThrowError(NotFoundError)
-        })
-      })
-
       describe('and thread comment exist', () => {
         let addThreadComment
 

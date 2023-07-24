@@ -62,8 +62,8 @@ describe('DeleteThreadCommentUseCase', () => {
       commentId: 'thread_comment-1'
     }
     const user = {
-      id: 'user-2',
-      username: 'dicoding2'
+      id: 'user-1',
+      username: 'dicoding'
     }
 
     /** creating dependency of use case */
@@ -71,7 +71,7 @@ describe('DeleteThreadCommentUseCase', () => {
     const mockUserRepository = new IUserRepository()
 
     /** mocking needed function */
-    mockThreadCommentRepository.checkThreadCommentAllow = jest.fn(() => Promise.resolve({ user_id: user.id }))
+    mockThreadCommentRepository.checkThreadCommentAllow = jest.fn(() => Promise.resolve({ user_id: 'user-2' }))
     mockThreadCommentRepository.deleteThreadComment = jest.fn(() => Promise.resolve())
 
     mockUserRepository.getUserById = jest.fn(() => Promise.resolve({
@@ -90,7 +90,7 @@ describe('DeleteThreadCommentUseCase', () => {
 
     // Assert
     await expect(deleteThreadCommentUseCase.execute(useCasePayload, user.id)).rejects.toThrow(AuthorizationError)
-    expect(mockUserRepository.getUserById).toHaveBeenCalledWith('user-2')
+    expect(mockUserRepository.getUserById).toHaveBeenCalledWith('user-1')
     expect(mockThreadCommentRepository.checkThreadCommentAllow).toHaveBeenCalledWith({
       commentId: useCasePayload.commentId,
       threadId: useCasePayload.threadId

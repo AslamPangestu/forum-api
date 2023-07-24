@@ -26,15 +26,14 @@ class ThreadRepositoryPostgres extends IThreadCommentLikeRepository {
   async updateThreadCommentLike (threadCommentLike, updateThreadCommentLike) {
     const { userId, commentId } = updateThreadCommentLike
     const { id, like_status } = threadCommentLike
+    const status = like_status === 0 ? 1 : 0
 
     const query = {
       text: `UPDATE ${TABLE_NAME} SET like_status = $4, updated_at = NOW() WHERE id = $1 AND comment_id = $2 AND user_id = $3 RETURNING id`,
-      values: [id, userId, commentId, like_status === 1 ? 0 : 1]
+      values: [id, commentId, userId, status]
     }
 
-    const result = await this._pool.query(query)
-
-    return result.rows[0]
+    await this._pool.query(query)
   }
 
   async findThreadCommentLike (findThreadCommentLike) {
@@ -42,7 +41,7 @@ class ThreadRepositoryPostgres extends IThreadCommentLikeRepository {
 
     const query = {
       text: `SELECT * FROM ${TABLE_NAME} WHERE comment_id = $1 AND user_id = $2`,
-      values: [userId, commentId]
+      values: [commentId, userId]
     }
 
     const result = await this._pool.query(query)

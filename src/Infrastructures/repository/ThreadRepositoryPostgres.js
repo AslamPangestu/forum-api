@@ -33,7 +33,7 @@ class ThreadRepositoryPostgres extends IThreadRepository {
         thread_comments.id AS comment_id, thread_comments.created_at AS comment_at, thread_comments.comment_id AS reply_id, 
         thread_comments.soft_delete_at AS comment_delete_at, thread_comments.content AS comment_content, 
         (SELECT users.username FROM users WHERE users.id = thread_comments.user_id) comment_username,
-        (SELECT SUM(like_count) AS like_count FROM thread_comment_likes WHERE thread_comment_likes.comment_id = thread_comments.comment_id) like_count
+        (SELECT SUM(like_status) AS like_count FROM thread_comment_likes WHERE thread_comment_likes.comment_id = thread_comments.comment_id) like_count
         FROM ${TABLE_NAME} 
         LEFT JOIN thread_comments ON ${TABLE_NAME}.id = thread_comments.thread_id
         INNER JOIN users ON ${TABLE_NAME}.user_id = users.id
@@ -51,7 +51,7 @@ class ThreadRepositoryPostgres extends IThreadRepository {
     return new GetThread(result.rows)
   }
 
-  async checkThreadExist (id) {
+  async checkThreadExist (id, message) {
     const query = {
       text: `SELECT * FROM ${TABLE_NAME} WHERE id = $1`,
       values: [id]
@@ -60,7 +60,7 @@ class ThreadRepositoryPostgres extends IThreadRepository {
     const result = await this._pool.query(query)
 
     if (!result.rowCount) {
-      throw new NotFoundError('thread tidak ditemukan')
+      throw new NotFoundError(`${message}, thread tidak ditemukan`)
     }
   }
 }

@@ -115,7 +115,7 @@ describe('ThreadRepositoryPostgres', () => {
           threadId: 'thread-1',
           commentId: 'thread_comment-1'
         })
-        await ThreadCommentLikesTableTestHelper.addThreadCommentLike({ id: 'thread_comment_like-1', commentId: 'thread_comment_1', userId: 'user_1' })
+        await ThreadCommentLikesTableTestHelper.addThreadCommentLike({ id: 'thread_comment_like-1', commentId: 'thread_comment-1', userId: 'user-1' })
 
         // Action & Assert
         const thread = await threadRepositoryPostgres.findThreadById('thread-1')
