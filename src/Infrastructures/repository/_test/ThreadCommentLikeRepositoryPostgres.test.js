@@ -149,6 +149,7 @@ describe('ThreadCommentLikeRepositoryPostgres', () => {
 
       // Assert
       const threadComments = await ThreadCommentLikesTableTestHelper.findThreadCommentLike('thread_comment_like-1', 'user-1', 'thread_comment-1')
+      console.log(threadComments)
       expect(threadComments).toHaveLength(1)
       expect(threadComments.like_status).toBe(1)
     })
